@@ -1,5 +1,3 @@
-# project/__init__.py
-
 from flask import Flask
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy

@@ -1,5 +1,3 @@
-# manage.py
-
 from flask.ext.script import Manager, Server
 from flask.ext.migrate import Migrate, MigrateCommand
 from app import app, db
