@@ -6,5 +6,4 @@ __pycahe__
 .DS_Store
 env.sh
 blog.md
-migrations
 _old
