@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
+from flask_restful import Resource, Api, reqparse
 from app.config import BaseConfig
 
 # config
@@ -9,50 +10,58 @@ from app.config import BaseConfig
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+api = Api(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
 from app.models import User
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-
 # skz: how to handle this with angular?
-#login_manager.login_view = 'login'
+# login_manager.login_view = 'login'
 
-#@login_manager.user_loader
-#def load_user(id):
+# @login_manager.user_loader
+# def load_user(id):
 #    return User.query.get(int(id))
 
 # routes
+
 
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
 
 
-@app.route('/api/users', methods=['POST'])
-def register():
-    data = request.json
-    try:
-        user = User(login=data['login'],
-                    email=data['email'],
-                    password=data['password'])
-    except:
-        status = 'error parsing request'
-        code = 400
-    else:
+class Users(Resource):
+    def post(self):
         try:
+            parser = reqparse.RequestParser()
+            parser.add_argument('login', type=str, required=True,
+                                help='login for the new user')
+            parser.add_argument('email', type=str, required=True,
+                                help='email address for the new user')
+            parser.add_argument('password', type=str, required=True,
+                                help='password for the new user')
+            args = parser.parse_args()
+
+            user = User(login=args['login'],
+                        email=args['email'],
+                        password=args['password'])
+
             db.session.add(user)
             db.session.commit()
-            status = 'OK'
-            code = 200
-        except:
-            status = 'error creating user'
-            code = 400
-        db.session.close()
+            db.session.close()
 
-    return jsonify(result=status), code
+            return {'status': 'OK'}
+        # TODO(skz): add separate handling for DB errors to avoid exposing queries and password hashes
+        except Exception as e:
+            return {'status': 'error', 'msg': str(e)}
+
+
+api.add_resource(Users, '/api/users')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
