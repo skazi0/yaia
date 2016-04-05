@@ -1,9 +1,8 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from app.config import BaseConfig
-
 
 # config
 
@@ -12,6 +11,8 @@ app.config.from_object(BaseConfig)
 
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+
+from app.models import User
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -30,10 +31,28 @@ def index():
     return app.send_static_file('index.html')
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/api/users', methods=['POST'])
 def register():
-    pass
+    data = request.json
+    try:
+        user = User(login=data['login'],
+                    email=data['email'],
+                    password=data['password'])
+    except:
+        status = 'error parsing request'
+        code = 400
+    else:
+        try:
+            db.session.add(user)
+            db.session.commit()
+            status = 'OK'
+            code = 200
+        except:
+            status = 'error creating user'
+            code = 400
+        db.session.close()
 
+    return jsonify(result=status), code
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
