@@ -3,6 +3,8 @@ from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from flask_restful import Resource, Api, reqparse
+from sqlalchemy.exc import IntegrityError
+
 from app.config import BaseConfig
 
 # config
@@ -54,10 +56,9 @@ class Users(Resource):
             db.session.commit()
             db.session.close()
 
-            return {'status': 'OK'}
-        # TODO(skz): add separate handling for DB errors to avoid exposing queries and password hashes
-        except Exception as e:
-            return {'status': 'error', 'msg': str(e)}
+            return {'message': 'user created'}
+        except IntegrityError:
+            return {'message': 'user already exists'}, 400
 
 
 api.add_resource(Users, '/api/users')
