@@ -1,7 +1,7 @@
 from flask import Flask
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import LoginManager
+from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_restful import Resource, Api, reqparse
 from sqlalchemy.exc import IntegrityError
 
@@ -15,6 +15,12 @@ app.config.from_object(BaseConfig)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+
 api = Api(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
@@ -23,12 +29,6 @@ from app.models import User
 
 # skz: how to handle this with angular?
 # login_manager.login_view = 'login'
-
-# @login_manager.user_loader
-# def load_user(id):
-#    return User.query.get(int(id))
-
-# routes
 
 
 @app.route('/')
@@ -61,7 +61,34 @@ class Users(Resource):
             return {'message': 'user already exists'}, 400
 
 
+class Sessions(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('login', type=str, required=True,
+                            help='login for the user')
+        parser.add_argument('password', type=str, required=True,
+                            help='password for the user')
+        args = parser.parse_args()
+
+        user = User.query.filter_by(login=args['login']).first()
+
+        if user is not None and bcrypt.check_password_hash(
+                user.password, args['password']):
+            login_user(user)
+            return {'message': 'OK', 'user': current_user.login}
+        else:
+            return {'message': 'login failed'}
+
+    def get(self):
+        # TODO: handle auth vs non-auth cases and return some user info
+        return current_user.login
+
+    def delete(self):
+        logout_user()
+
+
 api.add_resource(Users, '/api/users')
+api.add_resource(Sessions, '/api/sessions')
 
 
 @app.route('/login', methods=['GET', 'POST'])
