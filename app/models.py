@@ -20,6 +20,9 @@ class User(db.Model):
         self.registered_on = datetime.datetime.now()
         self.admin = admin
 
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)
+
     def is_authenticated(self):
         return True
 

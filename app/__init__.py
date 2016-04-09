@@ -72,8 +72,7 @@ class Sessions(Resource):
 
         user = User.query.filter_by(login=args['login']).first()
 
-        if user is not None and bcrypt.check_password_hash(
-                user.password, args['password']):
+        if user is not None and user.check_password(args['password']):
             login_user(user)
             return {'message': 'OK', 'user': current_user.login}
         else:
