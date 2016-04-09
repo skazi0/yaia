@@ -77,12 +77,14 @@ class Sessions(Resource):
         else:
             return {'message': 'login failed'}
 
+    @login_required
     def get(self):
-        # TODO: handle auth vs non-auth cases and return some user info
-        return current_user.login
+        return {'login': current_user.login, 'email': current_user.email}
 
+    @login_required
     def delete(self):
         logout_user()
+        return {'message': 'OK'}
 
 
 api.add_resource(Users, '/api/users')
