@@ -7,10 +7,9 @@ from sqlalchemy.exc import IntegrityError
 
 from app.config import BaseConfig
 
-# config
-
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
+app.config.from_envvar('YAIA_CONFIG')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
