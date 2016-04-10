@@ -2,6 +2,7 @@ from flask import Flask
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
+from flask.ext.session import Session
 from flask_restful import Resource, Api, reqparse
 from sqlalchemy.exc import IntegrityError
 
@@ -23,8 +24,10 @@ def load_user(id):
 api = Api(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+sess = Session(app)
 
 from app.models import User
+
 
 # skz: how to handle this with angular?
 # login_manager.login_view = 'login'
