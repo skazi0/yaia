@@ -1,9 +1,9 @@
-<div class="header clearfix" ng-controller="HeaderCtrl">
+<div class="header clearfix">
 <nav>
 <ul class="nav nav-pills">
-<li role="presentation" ng-class="{ active: isActive('/home') }"><a href="#/home">Home</a></li>
-<li role="presentation" ng-class="{ active: isActive('/invoices') }"><a href="#/invoices">Invoices</a></li>
-<li role="presentation" ng-class="{ active: isActive('/customers') }"><a href="#/customers">Customers</a></li>
-<li role="presentation"  ng-class="{ active: isActive('/login') }" class="pull-right"><a href="#/login">Login</a></li>
+<li role="presentation" ui-sref-active="active"><a ui-sref="home">Home</a></li>
+<li role="presentation" ui-sref-active="active"><a ui-sref="invoices">Invoices</a></li>
+<li role="presentation" ui-sref-active="active"><a ui-sref="customers">Customers</a></li>
+<li role="presentation" ui-sref-active="active" class="pull-right"><a ui-sref="login">Login</a></li>
 </ul>
 </nav>

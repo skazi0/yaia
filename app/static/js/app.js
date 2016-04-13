@@ -1,8 +1,7 @@
 'use strict';
 
-var YaiaApp = angular.module('YaiaApp', ['ngRoute', 'yaia.home', 'yaia.login', 'yaia.invoices']);
+var YaiaApp = angular.module('YaiaApp', ['ui.router', 'yaia.home', 'yaia.login', 'yaia.invoices']);
 
-YaiaApp.config(['$routeProvider', function ($routeProvider) {
-  $routeProvider
-    .otherwise({redirectTo: '/home'});
+YaiaApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/home');
 }]);
