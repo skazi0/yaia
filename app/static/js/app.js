@@ -21,7 +21,7 @@ YaiaApp.controller('UserCtrl', ['$scope', '$state', 'Auth', function($scope, $st
     $scope.logout = function() {
         Auth.logout().then(
             function() {
-                $state.transitionTo('anon.welcome');
+                $state.go('anon.welcome');
              }
         );
     };
@@ -39,7 +39,7 @@ YaiaApp.run(['$rootScope', '$state', 'Auth', function($rootScope, $state, Auth) 
         }
         if (!Auth.isAuthorized(toState.data.access)) {
             Auth.targetState = toState.name;
-            $state.transitionTo('anon.login');
+            $state.go('anon.login');
         }
     });
 }]);

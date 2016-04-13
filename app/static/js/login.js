@@ -11,7 +11,7 @@ yaiaLogin.controller('LoginCtrl', ['$scope', '$state', 'Auth', function($scope, 
     $scope.signin = function() {
         Auth.login($scope.login, $scope.password, $scope.remember).then(
             function(){
-                $state.transitionTo(Auth.targetState ? Auth.targetState : 'user.home');
+                $state.go(Auth.targetState ? Auth.targetState : 'user.home');
             },
             function(){
                 alert('login failed');
