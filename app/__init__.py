@@ -58,10 +58,16 @@ class Users(Resource):
 
             return {'message': 'user created'}
         except IntegrityError:
-            return {'message': 'user already exists'}, 400
+            return {'message': 'user already exists'}, 409
 
 
 class Sessions(Resource):
+    def user_session(self):
+        return {'authenticated': True, 'login': current_user.login, 'email': current_user.email}
+
+    def anonymous_session(self):
+        return {'authenticated': False, 'login': None, 'email': None}
+
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('login', type=str, required=True,
@@ -74,29 +80,33 @@ class Sessions(Resource):
 
         if user is not None and user.check_password(args['password']):
             login_user(user)
-            return {'message': 'OK', 'user': current_user.login}
+            return self.user_session()
         else:
-            return {'message': 'login failed'}
+            return self.anonymous_session(), 403
 
     @login_required
     def get(self):
-        return {'login': current_user.login, 'email': current_user.email}
+        if current_user.get_id() is not None:
+            return [self.user_session()]
+        else:
+            return [self.anonymous_session()]
 
     @login_required
     def delete(self):
         logout_user()
         return {'message': 'OK'}
 
+class Invoices(Resource):
+    @login_required
+    def get(self):
+        return [{'date': '2015-01-01', 'name': 'invoice1'},
+                {'date': '2015-02-01', 'name': 'invoice2'},
+                {'date': '2015-03-01', 'name': 'invoice3'},
+                ]
+
 
 api.add_resource(Users, '/api/users')
 api.add_resource(Sessions, '/api/sessions')
+api.add_resource(Invoices, '/api/invoices')
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    pass
-
-
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-    pass
