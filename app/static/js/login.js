@@ -1,12 +1,26 @@
 'use strict';
 
-var yaiaLogin = angular.module('yaia.login', ['ui.router']);
+var yaiaLogin = angular.module('yaia.login', ['ui.router', 'yaia.auth']);
 
 yaiaLogin.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   $stateProvider
-    .state('login', {url: '/login', templateUrl: 'static/views/login.html', controller: 'LoginCtrl'});
+    .state('anon.login', {url: '/login', templateUrl: 'static/views/login.html', controller: 'LoginCtrl'});
 }]);
 
-yaiaLogin.controller('LoginCtrl', ['$scope', function($scope) {
-    $scope.login = 'abclogin';
+yaiaLogin.controller('LoginCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {
+    $scope.signin = function() {
+        Auth.login($scope.login, $scope.password, $scope.remember).then(
+            function(){
+                $state.transitionTo('user.home').then(
+                    function(){
+                        // make sure that new view gets the update
+                        Auth.refresh();
+                    }
+                );
+            },
+            function(){
+                alert('login failed');
+            }
+        );
+    };
 }]);

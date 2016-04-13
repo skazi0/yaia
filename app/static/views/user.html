@@ -1,0 +1,10 @@
+<div class="header clearfix">
+<nav>
+<ul class="nav nav-pills">
+<li role="presentation" ui-sref-active="active"><a ui-sref="user.home">Home</a></li>
+<li role="presentation" ui-sref-active="active"><a ui-sref="user.invoices">Invoices</a></li>
+<li role="presentation" ui-sref-active="active"><a ui-sref="user.customers">Customers</a></li>
+<li role="presentation" class="pull-right"><a href="" ng-click="logout()">Logout {{current_user}}</a></li>
+</ul>
+</nav>
+<div ui-view></div>
