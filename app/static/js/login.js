@@ -8,6 +8,8 @@ yaiaLogin.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
 }]);
 
 yaiaLogin.controller('LoginCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {
+    $scope.waiting = false;
+
     $scope.signin = function() {
         $scope.waiting = true;
         Auth.login($scope.login, $scope.password, $scope.remember).then(
