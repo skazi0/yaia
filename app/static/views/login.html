@@ -9,6 +9,5 @@
      <input type="checkbox" value="remember-me" ng-model="remember"> Remember me
      </label>
    </div>
-   <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="signin()">Sign in</button>
-   <div>{{authstat}}</div>
+   <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="signin()"><i class="icon-spinner icon-spin" ng-show="waiting"></i> Sign In</button>
 </form>

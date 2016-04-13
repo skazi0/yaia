@@ -9,12 +9,15 @@ yaiaLogin.config(['$stateProvider', '$urlRouterProvider', function ($stateProvid
 
 yaiaLogin.controller('LoginCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {
     $scope.signin = function() {
+        $scope.waiting = true;
         Auth.login($scope.login, $scope.password, $scope.remember).then(
             function(){
                 $state.go(Auth.targetState ? Auth.targetState : 'user.home');
+                $scope.waiting = false;
             },
             function(){
-                alert('login failed');
+                $scope.waiting = false;
+                alert('login failed');                
             }
         );
     };

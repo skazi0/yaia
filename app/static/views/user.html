@@ -4,7 +4,7 @@
 <li role="presentation" ui-sref-active="active"><a ui-sref="user.home">Home</a></li>
 <li role="presentation" ui-sref-active="active"><a ui-sref="user.invoices">Invoices</a></li>
 <li role="presentation" ui-sref-active="active"><a ui-sref="user.customers">Customers</a></li>
-<li role="presentation" class="pull-right"><a href="" ng-click="logout()">Logout {{current_user}}</a></li>
+<li role="presentation" class="pull-right"><a href="" ng-click="logout()">Sign Out <strong>{{current_user.login}}</strong></a></li>
 </ul>
 </nav>
 <div ui-view></div>
