@@ -4,6 +4,7 @@ var yaiaAuth = angular.module('yaia.auth', ['restangular']);
 
 yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $rootScope) {
     var user = null;
+    var targetState = null;
 
     function notifyAuthChange() {
         $rootScope.$broadcast('authChanged', user);
@@ -21,6 +22,7 @@ yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $r
 
     function clearAuthInfo() {
         user = null;
+        targetState = null;
         notifyAuthChange();
     }
 
@@ -40,10 +42,8 @@ yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $r
         var session = {login: username, password: password, remember: remember};
         return Restangular.all('sessions').post(session).then(
             function(data) {
-// skz: for some reason this doesn't get recognized in $on
-//                user = data;
-//                notifyAuthChange();
-                updateAuthInfo();
+                user = data;
+                notifyAuthChange();
                 return data;
             }
         );
@@ -59,5 +59,6 @@ yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $r
         logout: logout,
         currentUser: currentUser,
         refresh: updateAuthInfo,
+        targetState: targetState,
     };
 }]);

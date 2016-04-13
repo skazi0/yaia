@@ -33,7 +33,12 @@ YaiaApp.run(['$rootScope', '$state', 'Auth', function($rootScope, $state, Auth) 
     Auth.refresh();
 
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        // clear old targetState to avoid weird state changes when not using 'forced' login page immediately but switching between some other anon pages before logging in
+        if (toState.name != 'anon.login') {
+            Auth.targetState = null;
+        }
         if (!Auth.isAuthorized(toState.data.access)) {
+            Auth.targetState = toState.name;
             $state.transitionTo('anon.login');
         }
     });
