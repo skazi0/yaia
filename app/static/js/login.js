@@ -11,12 +11,7 @@ yaiaLogin.controller('LoginCtrl', ['$scope', '$state', 'Auth', function($scope, 
     $scope.signin = function() {
         Auth.login($scope.login, $scope.password, $scope.remember).then(
             function(){
-                $state.transitionTo('user.home').then(
-                    function(){
-                        // make sure that new view gets the update
-                        Auth.refresh();
-                    }
-                );
+                $state.transitionTo('user.home');
             },
             function(){
                 alert('login failed');

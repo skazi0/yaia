@@ -53,10 +53,6 @@ yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $r
         return Restangular.all('sessions').remove().then(clearAuthInfo, clearAuthInfo);
     }
 
-    // init auth info
-    console.log('init auth info');
-    updateAuthInfo();
-
     return { 
         isAuthorized: isAuthorized,
         login: login,
