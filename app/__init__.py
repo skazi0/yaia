@@ -2,7 +2,7 @@ from flask import Flask
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api, reqparse, fields, marshal_with
 from sqlalchemy.exc import IntegrityError
 
 from app.config import BaseConfig
@@ -24,7 +24,7 @@ api = Api(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
-from app.models import User
+from app.models import *
 
 
 # skz: how to handle this with angular?
@@ -63,10 +63,10 @@ class Users(Resource):
 
 class Sessions(Resource):
     def user_session(self):
-        return {'authenticated': True, 'login': current_user.login, 'email': current_user.email}
+        return {'authenticated': True, 'id': current_user.get_id(), 'login': current_user.login, 'email': current_user.email}
 
     def anonymous_session(self):
-        return {'authenticated': False, 'login': None, 'email': None}
+        return {'authenticated': False, 'id': None, 'login': None, 'email': None}
 
     def post(self):
         parser = reqparse.RequestParser()
@@ -97,12 +97,16 @@ class Sessions(Resource):
         return {'message': 'OK'}
 
 class Invoices(Resource):
+    _fields = {
+        'id': fields.Integer,
+        'ref_num': fields.Integer,
+        'issued_on': fields.DateTime(dt_format='iso8601'),
+    }
+
     @login_required
+    @marshal_with(_fields)
     def get(self):
-        return [{'date': '2015-01-01', 'name': 'invoice1'},
-                {'date': '2015-02-01', 'name': 'invoice2'},
-                {'date': '2015-03-01', 'name': 'invoice3'},
-                ]
+        return Invoice.query.filter_by(owner_id=current_user.get_id()).order_by(Invoice.issued_on.desc()).all()
 
 
 api.add_resource(Users, '/api/users')

@@ -1,12 +1,16 @@
 'use strict';
 
-var yaiaInvoices = angular.module('yaia.invoices', ['ui.router']);
+var yaiaInvoices = angular.module('yaia.invoices', ['ui.router', 'restangular']);
 
 yaiaInvoices.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('user.invoices', {url: '/invoices', templateUrl: 'static/views/partials/invoices.html', controller: 'InvoicesCtrl'});
 }]);
 
-yaiaInvoices.controller('InvoicesCtrl', ['$scope', function($scope) {
-    $scope.todo = 'TODO: invoices will go here';
+yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', function($scope, Restangular) {
+    Restangular.all('invoices').getList().then(
+        function(data) {
+            $scope.invoices = data;
+        }
+    );
 }]);

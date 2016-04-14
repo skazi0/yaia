@@ -1,4 +1,6 @@
 import datetime
+from sqlalchemy.schema import ForeignKey
+
 from app import db, bcrypt
 
 
@@ -37,3 +39,13 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {0}>'.format(self.login)
+
+
+class Invoice(db.Model):
+
+    __tablename__ = "invoices"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    owner_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
+    ref_num = db.Column(db.Integer, nullable=False)
+    issued_on = db.Column(db.DateTime, nullable=False)
