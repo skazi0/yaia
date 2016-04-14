@@ -4,7 +4,7 @@ var yaiaWelcome = angular.module('yaia.welcome', ['ui.router']);
 
 yaiaWelcome.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   $stateProvider
-    .state('anon.welcome', {url: '/welcome', templateUrl: 'static/views/welcome.html', controller: 'WelcomeCtrl'});
+    .state('anon.welcome', {url: '/welcome', templateUrl: 'static/views/partials/welcome.html', controller: 'WelcomeCtrl'});
 }]);
 
 yaiaWelcome.controller('WelcomeCtrl', ['$scope', function($scope) {

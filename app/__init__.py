@@ -33,7 +33,7 @@ from app.models import User
 
 @app.route('/')
 def index():
-    return app.send_static_file('index.html')
+    return app.send_static_file('views/index.html')
 
 
 class Users(Resource):

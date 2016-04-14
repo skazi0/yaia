@@ -6,8 +6,8 @@ YaiaApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', f
   RestangularProvider.setBaseUrl('api');
   $urlRouterProvider.otherwise('/welcome');
   $stateProvider
-    .state('anon', {abstract: true, templateUrl: 'static/views/anon.html', data: {access: 'anon'}})
-    .state('user', {abstract: true, templateUrl: 'static/views/user.html', controller: 'UserCtrl', data: {access: 'user'}});
+    .state('anon', {abstract: true, templateUrl: 'static/views/partials/anon.html', data: {access: 'anon'}})
+    .state('user', {abstract: true, templateUrl: 'static/views/partials/user.html', controller: 'UserCtrl', data: {access: 'user'}});
 }]);
 
 YaiaApp.controller('UserCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {

@@ -4,7 +4,7 @@ var yaiaInvoices = angular.module('yaia.invoices', ['ui.router']);
 
 yaiaInvoices.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   $stateProvider
-    .state('user.invoices', {url: '/invoices', templateUrl: 'static/views/invoices.html', controller: 'InvoicesCtrl'});
+    .state('user.invoices', {url: '/invoices', templateUrl: 'static/views/partials/invoices.html', controller: 'InvoicesCtrl'});
 }]);
 
 yaiaInvoices.controller('InvoicesCtrl', ['$scope', function($scope) {
