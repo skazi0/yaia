@@ -4,7 +4,13 @@
 <li role="presentation" ui-sref-active="active"><a ui-sref="user.home">Home</a></li>
 <li role="presentation" ui-sref-active="active"><a ui-sref="user.invoices">Invoices</a></li>
 <li role="presentation" ui-sref-active="active"><a ui-sref="user.customers">Customers</a></li>
-<li role="presentation" class="pull-right"><a href="" ng-click="logout()">Sign Out <strong>{{current_user.login}}</strong></a></li>
+<li role="presentation" class="dropdown pull-right">
+<a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href="">{{current_user.login}}</a>
+<ul class="dropdown-menu">
+<li ui-sref-active="active"><a ui-sref="user.profile">Profile</a></li>
+<li><a href="#" ng-click="logout()">Sign Out</a></li>
+</ul>
+</li>
 </ul>
 </nav>
 <div ui-view></div>
