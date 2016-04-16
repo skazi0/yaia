@@ -1,8 +1,14 @@
-<div class="header clearfix">
-<nav>
-<ul class="nav nav-pills">
-<li role="presentation" ui-sref-active="active"><a ui-sref="anon.welcome">Welcome</a></li>
-<li role="presentation" ui-sref-active="active" class="pull-right"><a ui-sref="anon.login">Sign In</a></li>
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+<div class="navbar-header">
+<a ui-sref="anon.welcome" class="navbar-brand">YAIA</a>
+</div>
+<ul class="nav navbar-nav">
+<li ui-sref-active="active"><a ui-sref="anon.welcome">Welcome</a></li>
 </ul>
+<ul class="nav navbar-nav navbar-right">
+<li ui-sref-active="active"><a ui-sref="anon.login">Sign In</a></li>
+</ul>
+</div>
 </nav>
 <div ui-view></div>

@@ -1,16 +1,22 @@
-<div class="header clearfix">
-<nav>
-<ul class="nav nav-pills">
-<li role="presentation" ui-sref-active="active"><a ui-sref="user.home">Home</a></li>
-<li role="presentation" ui-sref-active="active"><a ui-sref="user.invoices">Invoices</a></li>
-<li role="presentation" ui-sref-active="active"><a ui-sref="user.customers">Customers</a></li>
-<li role="presentation" class="dropdown pull-right">
-<a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href="">{{current_user.login}}</a>
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+<div class="navbar-header">
+<a ui-sref="user.home" class="navbar-brand">YAIA</a>
+</div>
+<ul class="nav navbar-nav">
+<li ui-sref-active="active"><a ui-sref="user.home">Home</a></li>
+<li ui-sref-active="active"><a ui-sref="user.invoices">Invoices</a></li>
+<li ui-sref-active="active"><a ui-sref="user.customers">Customers</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li class="dropdown">
+<a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href="">{{current_user.login}}<i class="caret"></i></a>
 <ul class="dropdown-menu">
 <li ui-sref-active="active"><a ui-sref="user.profile">Profile</a></li>
-<li><a href="#" ng-click="logout()">Sign Out</a></li>
+<li><a href="" ng-click="logout()">Sign Out</a></li>
 </ul>
 </li>
 </ul>
+</div>
 </nav>
 <div ui-view></div>
