@@ -56,6 +56,7 @@ class Customer(db.Model):
     __tablename__ = "customers"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(255), unique=True, nullable=False)
     tax_id = db.Column(db.String(63), unique=True)
     contact_person = db.Column(db.String(127))
