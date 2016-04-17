@@ -49,3 +49,16 @@ class Invoice(db.Model):
     owner_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     ref_num = db.Column(db.Integer, nullable=False)
     issued_on = db.Column(db.DateTime, nullable=False)
+
+
+class Customer(db.Model):
+
+    __tablename__ = "customers"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    tax_id = db.Column(db.String(63), unique=True)
+    contact_person = db.Column(db.String(127))
+    email = db.Column(db.String(127))
+    invoicing_address = db.Column(db.Text, nullable=False)
+    shipping_address = db.Column(db.Text, nullable=False)
