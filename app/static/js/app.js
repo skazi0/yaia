@@ -11,6 +11,7 @@ YaiaApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', f
 }]);
 
 YaiaApp.controller('UserCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {
+    $scope.$state = $state;
     $scope.current_user = Auth.currentUser();
 
     $scope.$on('authChanged', function(event, authInfo) { 
