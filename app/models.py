@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy.schema import ForeignKey
+from sqlalchemy.schema import ForeignKey, UniqueConstraint
 
 from app import db, bcrypt
 
@@ -57,12 +57,16 @@ class Customer(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
-    name = db.Column(db.String(255), unique=True, nullable=False)
-    tax_id = db.Column(db.String(63), unique=True)
+    name = db.Column(db.String(255), nullable=False)
+    tax_id = db.Column(db.String(63))
     contact_person = db.Column(db.String(127))
     email = db.Column(db.String(127))
     invoicing_address = db.Column(db.Text, nullable=False)
     shipping_address = db.Column(db.Text, nullable=False)
+    __table_args__ = (
+        UniqueConstraint('user_id', 'name'),
+        UniqueConstraint('user_id', 'tax_id'),
+    )
 
     def __init__(self, user_id, name, tax_id, contact_person,
                  email, invoicing_address, shipping_address):
