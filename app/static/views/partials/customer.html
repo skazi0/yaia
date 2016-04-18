@@ -1,2 +1,34 @@
-<h1>Customer</h1>
-{{customer}}
+<h1>{{title}}</h1>
+<form>
+  <div class="row">
+    <div class="form-group col-md-8">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Name of the customer" ng-model="customer.name">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="taxid">Tax ID</label>
+      <input type="text" class="form-control" id="taxid" placeholder="Legal ID of the customer (e.g. VAT ID)" ng-model="customer.tax_id">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="contact_person">Contact Person</label>
+      <input type="text" class="form-control" id="contact_person" placeholder="Name of the contact person" ng-model="customer.contact_person">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" placeholder="Email address" ng-model="customer.email">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="invoicing_address">Invoicing Address</label>
+      <textarea class="form-control" id="invoicing_address" rows="3" placeholder="Address to be placed on invoice" ng-model="customer.invoicing_address"></textarea>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="shipping_address">Shipping Address</label>
+      <textarea class="form-control" id="shipping_address" rows="3" placeholder="Address to be used for shipping" ng-model="customer.shipping_address"></textarea>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
