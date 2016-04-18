@@ -1,1 +1,17 @@
-<h1>TODO: customers</h1>
+<h1>Customers</h1>
+<table class="table table-striped table-hover">
+<thead>
+<tr>
+<th>Name</th>
+<th>Tax ID</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat="c in customers">
+<td>{{c.name}}</td>
+<td>{{c.tax_id}}</td>
+<td><a ui-sref="user.customers({ id: c.id })"><i class="glyphicon glyphicon-edit"></i></a></td>
+</tr>
+</tbody>
+</table>

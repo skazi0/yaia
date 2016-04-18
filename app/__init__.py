@@ -96,6 +96,7 @@ class Sessions(Resource):
         logout_user()
         return {'message': 'OK'}
 
+
 class Invoices(Resource):
     _fields = {
         'id': fields.Integer,
@@ -109,8 +110,21 @@ class Invoices(Resource):
         return Invoice.query.filter_by(owner_id=current_user.get_id()).order_by(Invoice.issued_on.desc()).all()
 
 
+class Customers(Resource):
+    _fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+        'tax_id': fields.String,
+    }
+
+    @login_required
+    @marshal_with(_fields)
+    def get(self):
+        return Customer.query.filter_by(user_id=current_user.get_id()).all()
+
 api.add_resource(Users, '/api/users')
 api.add_resource(Sessions, '/api/sessions')
 api.add_resource(Invoices, '/api/invoices')
+api.add_resource(Customers, '/api/customers')
 
 
