@@ -184,4 +184,3 @@ class Customers(Resource):
             return {'message': 'customer updated'}
         except NoResultFound:
             return {'message': 'customer not found'}, 404
-        
