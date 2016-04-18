@@ -1,6 +1,8 @@
+from flask import request
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from flask_restful import Resource, reqparse, fields, marshal_with
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.exc import NoResultFound
 
 from app import db
 from app.models import *
@@ -88,6 +90,24 @@ class Invoices(Resource):
                 Invoice.issued_on.desc()).all()
 
 
+def customer_args(req=None):
+    parser = reqparse.RequestParser()
+
+    parser.add_argument('name', type=str, required=True,
+                        help='customer name')
+    parser.add_argument('tax_id', type=str, required=True,
+                        help='legal ID')
+    parser.add_argument('contact_person', type=str, required=True,
+                        help='name of the contact person')
+    parser.add_argument('email', type=str, required=True,
+                        help='email address')
+    parser.add_argument('invoicing_address', type=str, required=True,
+                        help='address to be used for invoicing')
+    parser.add_argument('shipping_address', type=str, required=True,
+                        help='address to be used for shipping')
+    return parser.parse_args(req)
+
+
 class CustomersList(Resource):
     _fields = {
         'id': fields.Integer,
@@ -99,6 +119,19 @@ class CustomersList(Resource):
     @marshal_with(_fields)
     def get(self):
         return Customer.query.filter_by(user_id=current_user.get_id()).all()
+
+    def post(self):
+        try:
+            args = customer_args(request)
+
+            customer = Customer(user_id=current_user.get_id(), **args)
+
+            db.session.add(customer)
+            db.session.commit()
+
+            return {'message': 'customer created', 'id': customer.id}
+        except IntegrityError:
+            return {'message': 'customer already exists'}, 409
 
 
 class Customers(Resource):
@@ -115,4 +148,40 @@ class Customers(Resource):
     @login_required
     @marshal_with(_fields)
     def get(self, id):
-        return Customer.query.filter_by(user_id=current_user.get_id(), id=id).one()
+        try:
+            return Customer.query.filter_by(
+                user_id=current_user.get_id(), id=id).one()
+        except NoResultFound:
+            return {'message': 'customer not found'}, 404
+
+    @login_required
+    def delete(self, id):
+        try:
+            customer = Customer.query.filter_by(
+                user_id=current_user.get_id(), id=id).one()
+
+            db.session.delete(customer)
+            db.session.commit()
+
+            return {'message': 'customer removed'}
+        except NoResultFound:
+            return {'message': 'customer not found'}, 404
+
+    @login_required
+    def put(self, id):
+        try:
+            args = customer_args(request)
+
+            customer = Customer.query.filter_by(
+                user_id=current_user.get_id(), id=id).one()
+
+            # update model fields from args
+            for k in args:
+                setattr(customer, k, args[k])
+
+            db.session.commit()
+
+            return {'message': 'customer updated'}
+        except NoResultFound:
+            return {'message': 'customer not found'}, 404
+        

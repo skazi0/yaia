@@ -4,14 +4,12 @@
 <tr>
 <th>Name</th>
 <th>Tax ID</th>
-<th></th>
 </tr>
 </thead>
 <tbody>
-<tr ng-repeat="c in customers">
+<tr ng-repeat="c in customers" ui-sref="user.customers({ id: c.id })" role="button">
 <td>{{c.name}}</td>
 <td>{{c.tax_id}}</td>
-<td><a ui-sref="user.customers({ id: c.id })"><i class="glyphicon glyphicon-edit"></i></a></td>
 </tr>
 </tbody>
 </table>

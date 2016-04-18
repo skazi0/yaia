@@ -19,12 +19,43 @@ yaiaCustomers.controller('CustomersCtrl', ['$scope', 'Restangular', function($sc
     );
 }]);
 
-yaiaCustomers.controller('CustomerCtrl', ['$scope', '$stateParams', 'Restangular', function($scope, $stateParams, Restangular) {
+yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'Restangular', function($scope, $state, $stateParams, Restangular) {
     $scope.id = $stateParams.id;
     if ($scope.id == 'new') {
-        $scope.title = 'New Customer';
+        $scope.title = 'Add Customer';
         $scope.customer = {};
+        $scope.save = function() {
+            Restangular.all('customers').post($scope.customer).then(
+                function(data) {
+                    $state.go('user.customers', {id: data.id});
+                },
+                function(resp) {
+                    alert("ERROR");
+                }
+            );
+        };
     } else {
+        $scope.title = 'Edit Customer';
+        $scope.remove = function() {
+            $scope.customer.remove().then(
+                function(data) {
+                    $state.go('user.customers', {id: null});
+                },
+                function(resp) {
+                    alert("ERROR");
+                }
+            );
+        };
+        $scope.save = function() {
+            $scope.customer.put().then(
+                function(data) {
+                    alert("Saved");
+                },
+                function(resp) {
+                    alert("ERROR");
+                }
+            );
+        };
         Restangular.one('customers', $scope.id).get().then(
             function(data) {
                 $scope.customer = data;

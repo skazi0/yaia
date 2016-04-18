@@ -63,3 +63,13 @@ class Customer(db.Model):
     email = db.Column(db.String(127))
     invoicing_address = db.Column(db.Text, nullable=False)
     shipping_address = db.Column(db.Text, nullable=False)
+
+    def __init__(self, user_id, name, tax_id, contact_person,
+                 email, invoicing_address, shipping_address):
+        self.user_id = user_id
+        self.name = name
+        self.tax_id = tax_id
+        self.contact_person = contact_person
+        self.email = email
+        self.invoicing_address = invoicing_address
+        self.shipping_address = shipping_address
