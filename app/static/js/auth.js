@@ -5,6 +5,7 @@ var yaiaAuth = angular.module('yaia.auth', ['restangular']);
 yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $rootScope) {
     var user = null;
     var targetState = null;
+    var targetStateParams = null;
 
     function notifyAuthChange() {
         $rootScope.$broadcast('authChanged', user);
@@ -23,6 +24,7 @@ yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $r
     function clearAuthInfo() {
         user = null;
         targetState = null;
+        targetStateParams = null;
         notifyAuthChange();
     }
 
@@ -60,5 +62,6 @@ yaiaAuth.factory('Auth', ['Restangular', '$rootScope', function (Restangular, $r
         currentUser: currentUser,
         refresh: updateAuthInfo,
         targetState: targetState,
+        targetStateParams: targetStateParams,
     };
 }]);

@@ -39,6 +39,7 @@ YaiaApp.run(['$rootScope', '$state', 'Auth', function($rootScope, $state, Auth) 
         }
         if (!Auth.isAuthorized(toState.data.access)) {
             Auth.targetState = toState.name;
+            Auth.targetStateParams = toParams;
             $state.go('anon.login');
         }
     });

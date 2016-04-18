@@ -14,7 +14,7 @@ yaiaLogin.controller('LoginCtrl', ['$scope', '$state', 'Auth', function($scope, 
         $scope.waiting = true;
         Auth.login($scope.login, $scope.password, $scope.remember).then(
             function(){
-                $state.go(Auth.targetState ? Auth.targetState : 'user.home');
+                $state.go(Auth.targetState ? Auth.targetState : 'user.home', Auth.targetStateParams);
                 $scope.waiting = false;
             },
             function(){
