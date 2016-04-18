@@ -20,5 +20,10 @@ yaiaCustomers.controller('CustomersCtrl', ['$scope', 'Restangular', function($sc
 }]);
 
 yaiaCustomers.controller('CustomerCtrl', ['$scope', '$stateParams', 'Restangular', function($scope, $stateParams, Restangular) {
-    $scope.customer = $stateParams.id;
+    $scope.id = $stateParams.id;
+    Restangular.one('customers', $scope.id).get().then(
+        function(data) {
+            $scope.customer = data;
+        }
+    );
 }]);

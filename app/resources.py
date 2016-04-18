@@ -88,7 +88,7 @@ class Invoices(Resource):
                 Invoice.issued_on.desc()).all()
 
 
-class Customers(Resource):
+class CustomersList(Resource):
     _fields = {
         'id': fields.Integer,
         'name': fields.String,
@@ -99,3 +99,20 @@ class Customers(Resource):
     @marshal_with(_fields)
     def get(self):
         return Customer.query.filter_by(user_id=current_user.get_id()).all()
+
+
+class Customers(Resource):
+    _fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+        'tax_id': fields.String,
+        'contact_person': fields.String,
+        'email': fields.String,
+        'invoicing_address': fields.String,
+        'shipping_address': fields.String,
+    }
+
+    @login_required
+    @marshal_with(_fields)
+    def get(self, id):
+        return Customer.query.filter_by(user_id=current_user.get_id(), id=id).one()

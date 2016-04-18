@@ -30,7 +30,8 @@ def load_user(id):
 api.add_resource(Users, '/api/users')
 api.add_resource(Sessions, '/api/sessions')
 api.add_resource(Invoices, '/api/invoices')
-api.add_resource(Customers, '/api/customers')
+api.add_resource(CustomersList, '/api/customers')
+api.add_resource(Customers, '/api/customers/<id>')
 
 
 @app.route('/')
