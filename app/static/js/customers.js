@@ -8,6 +8,7 @@ yaiaCustomers.config(['$stateProvider', '$urlRouterProvider', function ($statePr
         url: '/customers/:id',
         templateUrl: function ($stateParams) { return 'static/views/partials/' + ($stateParams.id ? 'customer.html' : 'customers.html'); },
         controllerProvider: function ($stateParams) { return $stateParams.id ? 'CustomerCtrl' : 'CustomersCtrl'; },
+        resolve: { $title: function() { return 'Customers'; }}
     });
 }]);
 
