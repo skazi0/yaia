@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask.ext.bower import Bower
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -38,4 +38,4 @@ api.add_resource(Customers, '/api/customers/<id>')
 
 @app.route('/')
 def index():
-    return app.send_static_file('views/index.html')
+    return render_template('index.html')
