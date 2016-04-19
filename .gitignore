@@ -1,5 +1,6 @@
 env
 venv
+bower_components
 __pycahe__
 *.pyc
 *.sqlite

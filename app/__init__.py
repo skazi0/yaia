@@ -1,4 +1,5 @@
 from flask import Flask
+from flask.ext.bower import Bower
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
@@ -10,6 +11,7 @@ app = Flask(__name__)
 app.config.from_object(BaseConfig)
 app.config.from_envvar('YAIA_CONFIG')
 
+bower = Bower(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
