@@ -22,7 +22,7 @@ yaiaCustomers.controller('CustomersCtrl', ['$scope', 'Restangular', function($sc
 yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'Restangular', function($scope, $state, $stateParams, Restangular) {
     $scope.id = $stateParams.id;
     if ($scope.id == 'new') {
-        $scope.title = 'Add Customer';
+        $scope.title = 'New Customer';
         $scope.customer = {};
         $scope.save = function() {
             Restangular.all('customers').post($scope.customer).then(
