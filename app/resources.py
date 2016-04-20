@@ -1,6 +1,6 @@
 from flask import request
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from flask_restful import Resource, reqparse, fields, marshal_with
+from flask_restful import Resource, reqparse, fields, marshal_with, marshal
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -83,11 +83,33 @@ class Invoices(Resource):
     }
 
     @login_required
-    @marshal_with(_fields)
     def get(self):
-        return Invoice.query.filter_by(
-            owner_id=current_user.get_id()).order_by(
-                Invoice.issued_on.desc()).all()
+        parser = reqparse.RequestParser()
+        parser.add_argument('page', type=int, help='page number')
+        parser.add_argument('count', type=int, help='page size')
+        parser.add_argument('sorting', type=str, help='sorting fields with order')
+        args = parser.parse_args()
+
+        totalQuery = Invoice.query.filter_by(owner_id=current_user.get_id())
+        query = totalQuery
+
+        # sorting param (encoded as field:dir|field:dir)
+        if args['sorting'] is not None:
+            fields = args['sorting'].split('|')
+            for field in fields:
+                (name, direction) = field.split(':')
+                fieldobj = getattr(Invoice, name)
+                dirobj = getattr(fieldobj, direction)()
+                query = query.order_by(dirobj)
+
+        # paging params
+        if all(args[p] is not None for p in ('count', 'page')):
+            query = query.limit(
+                args['count']).offset(
+                    (args['page']-1) * args['count'])
+
+        return {'items': marshal(query.all(), Invoices._fields),
+                'totalItemCount': totalQuery.count()}
 
 
 def customer_args(req=None):

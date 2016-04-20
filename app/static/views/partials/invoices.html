@@ -1,15 +1,7 @@
 <h1>Invoices</h1>
-<table class="table table-striped table-hover">
-<thead>
-<tr>
-<th>Ref#</th>
-<th>Issued On</th>
+<table ng-table="tableParams" class="table table-striped table-hover">
+<tr ng-repeat="row in $data track by row.id">
+<td data-title="'Number'" sortable="'ref_num'">{{row.ref_num}}</td>
+<td data-title="'Issued On'" sortable="'issued_on'">{{row.issued_on}}</td>
 </tr>
-</thead>
-<tbody>
-<tr ng-repeat="i in invoices">
-<td>{{i.ref_num}}</td>
-<td>{{i.issued_on}}</td>
-</tr>
-</tbody>
 </table>
