@@ -16,15 +16,8 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', 'NgTableParams
             counts: [10, 20, 50, 100],
             getData: function(params) {
                 var urlparams = params.url();
-                // workaround param syntax not supported by reqparse
-                var sortingobj = params.sorting();
-                var sortingfields = [];
-                for (var key in sortingobj) {
-                    sortingfields.push(key + ':' + sortingobj[key]);
-                }
-                if (sortingfields.length > 0) {
-                    urlparams.sorting = sortingfields.join('|');
-                }
+                // pass sorting as json for easier handling in backend
+                urlparams.sorting = params.sorting();
                 return Restangular.one('invoices').get(urlparams).then(
                     function(data) {
                         params.total(data.totalItemCount);

@@ -3,6 +3,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from flask_restful import Resource, reqparse, fields, marshal_with, marshal
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+import json
 
 from app import db
 from app.models import *
@@ -87,17 +88,16 @@ class Invoices(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('page', type=int, help='page number')
         parser.add_argument('count', type=int, help='page size')
-        parser.add_argument('sorting', type=str, help='sorting fields with order')
+        parser.add_argument('sorting', type=json.loads, help='sorting fields with order')
         args = parser.parse_args()
 
         totalQuery = Invoice.query.filter_by(owner_id=current_user.get_id())
         query = totalQuery
 
-        # sorting param (encoded as field:dir|field:dir)
+        # sorting param
         if args['sorting'] is not None:
-            fields = args['sorting'].split('|')
-            for field in fields:
-                (name, direction) = field.split(':')
+            for name, direction in args['sorting'].iteritems():
+                # sanitize by looking up fields/directions in models
                 fieldobj = getattr(Invoice, name)
                 dirobj = getattr(fieldobj, direction)()
                 query = query.order_by(dirobj)
