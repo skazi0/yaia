@@ -81,6 +81,7 @@ class Invoices(Resource):
         'id': fields.Integer,
         'ref_num': fields.Integer,
         'issued_on': fields.DateTime(dt_format='iso8601'),
+        'due_on': fields.DateTime(dt_format='iso8601'),
     }
 
     @login_required
