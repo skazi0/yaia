@@ -2,3 +2,7 @@
     max-width: 330px;
     margin: 40px auto;
 }
+
+table.table-left-headers th {
+    text-align: left;
+}
