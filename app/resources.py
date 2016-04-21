@@ -146,6 +146,7 @@ class CustomersList(Resource):
     def get(self):
         return Customer.query.filter_by(user_id=current_user.get_id()).all()
 
+    @login_required
     def post(self):
         try:
             args = customer_args(request)
