@@ -12,21 +12,25 @@ yaiaCustomers.config(['$stateProvider', '$urlRouterProvider', function ($statePr
     });
 }]);
 
-yaiaCustomers.controller('CustomersCtrl', ['$scope', 'Restangular', function($scope, Restangular) {
-    Restangular.all('customers').getList().then(
+yaiaCustomers.factory('Customers', ['Restangular', function (Restangular) {
+    return Restangular.service('customers');
+}]);
+
+yaiaCustomers.controller('CustomersCtrl', ['$scope', 'Customers', function($scope, Customers) {
+    Customers.getList().then(
         function(data) {
             $scope.customers = data;
         }
     );
 }]);
 
-yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'Restangular', function($scope, $state, $stateParams, Restangular) {
+yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'Customers', function($scope, $state, $stateParams, Customers) {
     $scope.id = $stateParams.id;
     if ($scope.id == 'new') {
         $scope.title = 'New Customer';
         $scope.customer = {};
         $scope.save = function() {
-            Restangular.all('customers').post($scope.customer).then(
+            Customers.post($scope.customer).then(
                 function(data) {
                     $state.go('user.customers', {id: data.id});
                 },
@@ -57,7 +61,7 @@ yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'R
                 }
             );
         };
-        Restangular.one('customers', $scope.id).get().then(
+        Customers.one($scope.id).get().then(
             function(data) {
                 $scope.customer = data;
             }

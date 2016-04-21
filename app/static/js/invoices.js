@@ -11,7 +11,11 @@ yaiaInvoices.config(['$stateProvider', '$urlRouterProvider', function ($statePro
         resolve: { $title: function() { return 'Invoices'; }}});
 }]);
 
-yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', 'NgTableParams', function($scope, Restangular, NgTableParams) {
+yaiaInvoices.factory('Invoices', ['Restangular', function (Restangular) {
+    return Restangular.service('invoices');
+}]);
+
+yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', function($scope, Invoices, NgTableParams) {
     $scope.tableParams = new NgTableParams(
         {
             count: 10,
@@ -23,7 +27,7 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', 'NgTableParams
                 var urlparams = params.url();
                 // pass sorting as json for easier handling in backend
                 urlparams.sorting = params.sorting();
-                return Restangular.one('invoices').get(urlparams).then(
+                return Invoices.one().get(urlparams).then(
                     function(data) {
                         params.total(data.totalItemCount);
                         return data.items;
@@ -34,13 +38,13 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', 'NgTableParams
     );
 }]);
 
-yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Restangular', function($scope, $state, $stateParams, Restangular) {
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Invoices', function($scope, $state, $stateParams, Invoices) {
     $scope.id = $stateParams.id;
     if ($scope.id == 'new') {
         $scope.title = 'New Invoice';
         $scope.invoice = {};
         $scope.save = function() {
-            Restangular.all('invoices').post($scope.invoice).then(
+            Invoices.post($scope.invoice).then(
                 function(data) {
                     $state.go('user.invoices', {id: data.id});
                 },
@@ -71,7 +75,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Res
                 }
             );
         };
-        Restangular.one('invoices', $scope.id).get().then(
+        Invoices.one($scope.id).get().then(
             function(data) {
                 $scope.invoice = data;
             }
