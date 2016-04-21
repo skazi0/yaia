@@ -1,6 +1,6 @@
 'use strict';
 
-var YaiaApp = angular.module('YaiaApp', ['ui.router', 'ui.router.title', 'yaia.home', 'yaia.login', 'yaia.invoices', 'yaia.welcome', 'restangular', 'yaia.auth', 'yaia.customers', 'yaia.profile']);
+var YaiaApp = angular.module('YaiaApp', ['ui.router', 'ui.router.title', 'ui.gravatar', 'yaia.home', 'yaia.login', 'yaia.invoices', 'yaia.welcome', 'restangular', 'yaia.auth', 'yaia.customers', 'yaia.profile']);
 
 YaiaApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', function ($stateProvider, $urlRouterProvider, RestangularProvider) {
   RestangularProvider.setBaseUrl('api');

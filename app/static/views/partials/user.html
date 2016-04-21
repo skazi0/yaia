@@ -10,7 +10,7 @@
 </ul>
 <ul class="nav navbar-nav navbar-right">
 <li class="dropdown">
-<a class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href="">{{current_user.login}}<i class="caret"></i></a>
+<a class="dropdown-toggle user-menu-link" aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" href=""><img alt="{{current_user.email}}" gravatar-src="current_user.email" gravatar-size="40" gravatar-default="mm"> {{current_user.login}}<i class="caret"></i></a>
 <ul class="dropdown-menu">
 <li ui-sref-active="active"><a ui-sref="user.profile"><i class="glyphicon glyphicon-user"></i> Profile</a></li>
 <li><a href="" ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i> Sign Out</a></li>

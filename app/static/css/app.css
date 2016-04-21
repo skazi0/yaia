@@ -10,3 +10,7 @@ table.table-left-headers th {
 .navbar-brand {
     padding: 9px 16px;
 }
+
+.nav .user-menu-link {
+    padding: 4px 16px;
+}
