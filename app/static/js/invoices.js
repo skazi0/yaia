@@ -11,6 +11,7 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', 'NgTableParams
     $scope.tableParams = new NgTableParams(
         {
             count: 10,
+            sorting: { issued_on: 'desc' },
         },
         {
             counts: [10, 20, 50, 100],
