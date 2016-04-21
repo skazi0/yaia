@@ -87,9 +87,12 @@ class Invoices(Resource):
     @login_required
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('page', type=int, help='page number')
-        parser.add_argument('count', type=int, help='page size')
-        parser.add_argument('sorting', type=json.loads, help='sorting fields with order')
+        parser.add_argument('page', type=int,
+                            help='page number')
+        parser.add_argument('count', type=int,
+                            help='page size')
+        parser.add_argument('sorting', type=json.loads,
+                            help='sorting fields with order')
         args = parser.parse_args()
 
         totalQuery = Invoice.query.filter_by(owner_id=current_user.get_id())
