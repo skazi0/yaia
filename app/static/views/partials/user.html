@@ -5,7 +5,7 @@
 </div>
 <ul class="nav navbar-nav">
 <li ui-sref-active="active"><a ui-sref="user.home">Home</a></li>
-<li ui-sref-active="active"><a ui-sref="user.invoices">Invoices</a></li>
+<li ng-class="{'active': $state.includes('user.invoices')}"><a ui-sref="user.invoices({id:''})">Invoices</a></li>
 <li ng-class="{'active': $state.includes('user.customers')}"><a ui-sref="user.customers({id:''})">Customers</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right">

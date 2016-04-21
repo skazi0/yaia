@@ -4,7 +4,11 @@ var yaiaInvoices = angular.module('yaia.invoices', ['ui.router', 'restangular', 
 
 yaiaInvoices.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   $stateProvider
-    .state('user.invoices', {url: '/invoices', templateUrl: 'static/views/partials/invoices.html', controller: 'InvoicesCtrl', resolve: { $title: function() { return 'Invoices'; }}});
+    .state('user.invoices', {
+        url: '/invoices/:id',
+        templateUrl: function ($stateParams) { return 'static/views/partials/' + ($stateParams.id ? 'invoice.html' : 'invoices.html'); },
+        controllerProvider: function ($stateParams) { return $stateParams.id ? 'InvoiceCtrl' : 'InvoicesCtrl'; },
+        resolve: { $title: function() { return 'Invoices'; }}});
 }]);
 
 yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', 'NgTableParams', function($scope, Restangular, NgTableParams) {
@@ -28,4 +32,49 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Restangular', 'NgTableParams
             },
         }
     );
+}]);
+
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Restangular', function($scope, $state, $stateParams, Restangular) {
+    $scope.id = $stateParams.id;
+    if ($scope.id == 'new') {
+        $scope.title = 'New Invoice';
+        $scope.invoice = {};
+        $scope.save = function() {
+            Restangular.all('invoices').post($scope.invoice).then(
+                function(data) {
+                    $state.go('user.invoices', {id: data.id});
+                },
+                function(resp) {
+                    alert("ERROR");
+                }
+            );
+        };
+    } else {
+        $scope.title = 'Edit Invoice';
+        $scope.remove = function() {
+            $scope.invoice.remove().then(
+                function(data) {
+                    $state.go('user.invoices', {id: null});
+                },
+                function(resp) {
+                    alert("ERROR");
+                }
+            );
+        };
+        $scope.save = function() {
+            $scope.invoice.put().then(
+                function(data) {
+                    alert("Saved");
+                },
+                function(resp) {
+                    alert("ERROR");
+                }
+            );
+        };
+        Restangular.one('invoices', $scope.id).get().then(
+            function(data) {
+                $scope.invoice = data;
+            }
+        );
+    }
 }]);

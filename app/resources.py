@@ -76,7 +76,15 @@ class Sessions(Resource):
         return {'message': 'OK'}
 
 
-class Invoices(Resource):
+def invoice_args(req=None):
+    parser = reqparse.RequestParser()
+
+    parser.add_argument('ref_num', type=int , required=True,
+                        help='invoice number')
+    return parser.parse_args(req)
+
+
+class InvoicesList(Resource):
     _fields = {
         'id': fields.Integer,
         'ref_num': fields.Integer,
@@ -114,6 +122,69 @@ class Invoices(Resource):
 
         return {'items': marshal(query.all(), Invoices._fields),
                 'totalItemCount': totalQuery.count()}
+
+    @login_required
+    def post(self):
+        try:
+            args = invoice_args(request)
+
+            invoice = Invoice(owner_id=current_user.get_id(), **args)
+
+            db.session.add(invoice)
+            db.session.commit()
+
+            return {'message': 'invoice created', 'id': invoice.id}
+        except IntegrityError:
+            return {'message': 'invoice already exists'}, 409
+
+
+class Invoices(Resource):
+    _fields = {
+        'id': fields.Integer,
+        'ref_num': fields.Integer,
+        'issued_on': fields.DateTime(dt_format='iso8601'),
+        'due_on': fields.DateTime(dt_format='iso8601'),
+    }
+
+    @login_required
+    @marshal_with(_fields)
+    def get(self, id):
+        try:
+            return Invoice.query.filter_by(
+                owner_id=current_user.get_id(), id=id).one()
+        except NoResultFound:
+            return {'message': 'invoice not found'}, 404
+
+    @login_required
+    def delete(self, id):
+        try:
+            invoice = Invoice.query.filter_by(
+                owner_id=current_user.get_id(), id=id).one()
+
+            db.session.delete(invoice)
+            db.session.commit()
+
+            return {'message': 'invoice removed'}
+        except NoResultFound:
+            return {'message': 'invoice not found'}, 404
+
+    @login_required
+    def put(self, id):
+        try:
+            args = invoice_args(request)
+
+            invoice = Invoice.query.filter_by(
+                owner_id=current_user.get_id(), id=id).one()
+
+            # update model fields from args
+            for k in args:
+                setattr(invoice, k, args[k])
+
+            db.session.commit()
+
+            return {'message': 'invoice updated'}
+        except NoResultFound:
+            return {'message': 'invoice not found'}, 404
 
 
 def customer_args(req=None):
