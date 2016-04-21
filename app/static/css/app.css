@@ -6,3 +6,7 @@
 table.table-left-headers th {
     text-align: left;
 }
+
+.navbar-brand {
+    padding: 9px 16px;
+}
