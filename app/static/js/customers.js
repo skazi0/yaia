@@ -42,7 +42,7 @@ yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'C
         $scope.save = function() {
             Customers.post($scope.customer).then(
                 function(data) {
-                    $state.go('user.customers', {id: data.id});
+                    $state.go('user.customers', {id: null});
                 },
                 function(resp) {
                     alert("ERROR");
@@ -64,7 +64,7 @@ yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'C
         $scope.save = function() {
             $scope.customer.put().then(
                 function(data) {
-                    alert("Saved");
+                    $state.go('user.customers', {id: null});
                 },
                 function(resp) {
                     alert("ERROR");

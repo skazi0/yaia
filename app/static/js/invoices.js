@@ -46,7 +46,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Inv
         $scope.save = function() {
             Invoices.post($scope.invoice).then(
                 function(data) {
-                    $state.go('user.invoices', {id: data.id});
+                    $state.go('user.invoices', {id: null});
                 },
                 function(resp) {
                     alert("ERROR");
@@ -68,7 +68,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Inv
         $scope.save = function() {
             $scope.invoice.put().then(
                 function(data) {
-                    alert("Saved");
+                    $state.go('user.invoices', {id: null});
                 },
                 function(resp) {
                     alert("ERROR");
