@@ -1,6 +1,6 @@
 'use strict';
 
-var yaiaCustomers = angular.module('yaia.customers', ['ui.router', 'restangular']);
+var yaiaCustomers = angular.module('yaia.customers', ['ui.router', 'restangular', 'ngTable']);
 
 yaiaCustomers.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -16,12 +16,22 @@ yaiaCustomers.factory('Customers', ['Restangular', function (Restangular) {
     return Restangular.service('customers');
 }]);
 
-yaiaCustomers.controller('CustomersCtrl', ['$scope', 'Customers', function($scope, Customers) {
+yaiaCustomers.controller('CustomersCtrl', ['$scope', 'Customers', 'NgTableParams', function($scope, Customers, NgTableParams) {
     Customers.getList().then(
         function(data) {
-            $scope.customers = data;
+            $scope.tableParams = new NgTableParams(
+                {
+                    sorting: { name: 'asc' },
+                    count: data.length, // disable paging
+                },
+                {
+                    counts: [], // disable page sizes display
+                    data: data,
+                }
+            );
         }
     );
+
 }]);
 
 yaiaCustomers.controller('CustomerCtrl', ['$scope', '$state', '$stateParams', 'Customers', function($scope, $state, $stateParams, Customers) {
