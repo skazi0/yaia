@@ -10,10 +10,12 @@
   - [ ] Customer currency
   - [ ] Language
   - [ ] Invoice template
+  - [ ] Bank account selection
 - [ ] User profile/settings
   - [ ] Own address
   - [ ] Tax levels
   - [ ] Own currency
+  - [ ] Bank accounts (+optional API URL)
 - [ ] Invoice list
   - [x] Basic list
   - [x] Server-side paging and sorting
@@ -21,12 +23,13 @@
   - [ ] Payments tracking
     - [ ] Automatic detection of payments from external API (bank history)
   - [ ] Invoice status (draft, ovedue, closed)
+  - [ ] Automatic conversion of due amounts from customer currency to own currency from external API (currency history)
 - [ ] Invoice creation and editing
+  - [ ] Copy contents from previous invoices
   - [ ] Fill customer data from selected Customer
   - [ ] Due date calculation based on predefined payment terms
   - [ ] Items list
-  - [ ] Tax handling
+  - [ ] Tax handling (+"no tax" handling)
   - [ ] Terms & Conditions / Notes
-  - [ ] ...
 - [ ] Invoice export to PDF
   - [ ] Templates
