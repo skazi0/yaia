@@ -2,6 +2,7 @@
 <table ng-table="tableParams" class="table table-striped table-hover table-left-headers">
 <tr ng-repeat="row in $data track by row.id" ui-sref="user.invoices({id: row.id})" role="button">
 <td data-title="'Number'" sortable="'ref_num'">{{row.ref_num}}</td>
+<td data-title="'Customer'" sortable="'customer_name'">{{row.customer_name}}</td>
 <td data-title="'Issued On'" sortable="'issued_on'">{{row.issued_on}}</td>
 <td data-title="'Due On'" sortable="'due_on'">{{row.due_on}}</td>
 </tr>

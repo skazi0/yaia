@@ -51,6 +51,13 @@ class Invoice(db.Model):
     issued_on = db.Column(db.DateTime, nullable=False)
     due_on = db.Column(db.DateTime, nullable=False)
 
+    customer_name = db.Column(db.String(255), nullable=False)
+    customer_tax_id = db.Column(db.String(63))
+    customer_contact_person = db.Column(db.String(127))
+    customer_email = db.Column(db.String(127))
+    customer_invoicing_address = db.Column(db.Text, nullable=False)
+    customer_shipping_address = db.Column(db.Text, nullable=False)
+
 
 class Customer(db.Model):
 

@@ -54,7 +54,6 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Inv
             );
         };
     } else {
-        $scope.title = 'Edit Invoice';
         $scope.remove = function() {
             $scope.invoice.remove().then(
                 function(data) {
@@ -77,6 +76,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Inv
         };
         Invoices.one($scope.id).get().then(
             function(data) {
+                $scope.title = 'Edit Invoice #' + data.ref_num;
                 $scope.invoice = data;
             }
         );

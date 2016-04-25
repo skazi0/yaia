@@ -81,6 +81,19 @@ def invoice_args(req=None):
 
     parser.add_argument('ref_num', type=int, required=True,
                         help='invoice number')
+    parser.add_argument('customer_name', type=str, required=True,
+                        help='customer name')
+    parser.add_argument('customer_tax_id', type=str, required=False,
+                        help='legal ID')
+    parser.add_argument('customer_contact_person', type=str, required=False,
+                        help='name of the contact person')
+    parser.add_argument('customer_email', type=str, required=False,
+                        help='email address')
+    parser.add_argument('customer_invoicing_address', type=str, required=True,
+                        help='address to be used for invoicing')
+    parser.add_argument('customer_shipping_address', type=str, required=False,
+                        help='address to be used for shipping')
+
     return parser.parse_args(req)
 
 
@@ -88,6 +101,7 @@ class InvoicesList(Resource):
     _fields = {
         'id': fields.Integer,
         'ref_num': fields.Integer,
+        'customer_name': fields.String,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
     }
@@ -144,6 +158,12 @@ class Invoices(Resource):
         'ref_num': fields.Integer,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
+        'customer_name': fields.String,
+        'customer_tax_id': fields.String,
+        'customer_contact_person': fields.String,
+        'customer_email': fields.String,
+        'customer_invoicing_address': fields.String,
+        'customer_shipping_address': fields.String,
     }
 
     @login_required
