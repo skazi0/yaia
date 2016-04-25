@@ -79,7 +79,7 @@ class Sessions(Resource):
 def invoice_args(req=None):
     parser = reqparse.RequestParser()
 
-    parser.add_argument('ref_num', type=int , required=True,
+    parser.add_argument('ref_num', type=int, required=True,
                         help='invoice number')
     return parser.parse_args(req)
 
