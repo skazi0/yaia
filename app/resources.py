@@ -89,7 +89,7 @@ def invoice_args(req=None):
                         help='email address')
     parser.add_argument('customer_invoicing_address', type=str, required=True,
                         help='address to be used for invoicing')
-    parser.add_argument('customer_shipping_address', type=str, required=False,
+    parser.add_argument('customer_shipping_address', type=str, required=True,
                         help='address to be used for shipping')
 
     return parser.parse_args(req)
@@ -140,7 +140,10 @@ class InvoicesList(Resource):
         try:
             args = invoice_args(request)
 
-            invoice = Invoice(owner_id=current_user.get_id(), **args)
+            ref_num = current_user.next_invoice_num
+            current_user.next_invoice_num += 1
+
+            invoice = Invoice(owner_id=current_user.get_id(), ref_num=ref_num, **args)
 
             db.session.add(invoice)
             db.session.commit()

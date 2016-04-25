@@ -1,4 +1,5 @@
 import datetime
+from sqlalchemy import func
 from sqlalchemy.schema import ForeignKey, UniqueConstraint
 
 from app import db, bcrypt
@@ -14,6 +15,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
+    next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
 
     def __init__(self, login, email, password, admin=False):
         self.login = login
@@ -48,8 +50,8 @@ class Invoice(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     owner_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     ref_num = db.Column(db.Integer, nullable=False)
-    issued_on = db.Column(db.DateTime, nullable=False)
-    due_on = db.Column(db.DateTime, nullable=False)
+    issued_on = db.Column(db.DateTime, nullable=False, default=func.now())
+    due_on = db.Column(db.DateTime, nullable=False, default=func.now())
 
     customer_name = db.Column(db.String(255), nullable=False)
     customer_tax_id = db.Column(db.String(63))
