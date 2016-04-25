@@ -192,11 +192,11 @@ def customer_args(req=None):
 
     parser.add_argument('name', type=str, required=True,
                         help='customer name')
-    parser.add_argument('tax_id', type=str, required=True,
+    parser.add_argument('tax_id', type=str, required=False,
                         help='legal ID')
-    parser.add_argument('contact_person', type=str, required=True,
+    parser.add_argument('contact_person', type=str, required=False,
                         help='name of the contact person')
-    parser.add_argument('email', type=str, required=True,
+    parser.add_argument('email', type=str, required=False,
                         help='email address')
     parser.add_argument('invoicing_address', type=str, required=True,
                         help='address to be used for invoicing')
