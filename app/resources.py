@@ -140,10 +140,7 @@ class InvoicesList(Resource):
         try:
             args = invoice_args(request)
 
-            ref_num = current_user.next_invoice_num
-            current_user.next_invoice_num += 1
-
-            invoice = Invoice(owner_id=current_user.get_id(), ref_num=ref_num, **args)
+            invoice = Invoice(owner_id=current_user.get_id(), ref_num=current_user.make_next_invoice_number(), **args)
 
             db.session.add(invoice)
             db.session.commit()

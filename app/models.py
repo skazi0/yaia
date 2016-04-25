@@ -42,6 +42,11 @@ class User(db.Model):
     def __repr__(self):
         return '<User {0}>'.format(self.login)
 
+    def make_next_invoice_number(self):
+        num = self.next_invoice_num
+        self.next_invoice_num += 1
+        return num
+
 
 class Invoice(db.Model):
 
