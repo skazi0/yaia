@@ -16,6 +16,7 @@
   - [ ] Tax levels
   - [ ] Own currency
   - [ ] Bank accounts (+optional API URL)
+  - [ ] Default page sizes for item lists
 - [ ] Invoice list
   - [x] Basic list
   - [x] Server-side paging and sorting
@@ -25,11 +26,12 @@
   - [ ] Invoice status (draft, ovedue, closed)
   - [ ] Automatic conversion of due amounts from customer currency to own currency from external API (currency history)
 - [ ] Invoice creation and editing
+  - [ ] Purchase / Work Order Number
   - [ ] Copy contents from previous invoices
   - [ ] Fill customer data from selected Customer
   - [ ] Due date calculation based on predefined payment terms
   - [ ] Items list
-  - [ ] Tax handling (+"no tax" handling)
+  - [ ] Tax handling (+"no tax"/"reverse charge" handling)
   - [ ] Terms & Conditions / Notes
 - [ ] Invoice export to PDF
   - [ ] Templates
