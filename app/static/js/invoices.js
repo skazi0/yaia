@@ -1,6 +1,6 @@
 'use strict';
 
-var yaiaInvoices = angular.module('yaia.invoices', ['ui.router', 'restangular', 'ngTable']);
+var yaiaInvoices = angular.module('yaia.invoices', ['ui.router', 'ui.select', 'ngSanitize', 'angular-collapse', 'restangular', 'ngTable']);
 
 yaiaInvoices.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -38,8 +38,35 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', 
     );
 }]);
 
-yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$state', '$stateParams', 'Invoices', function($scope, $state, $stateParams, Invoices) {
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Customers', function($scope, $sce, $state, $stateParams, Invoices, Customers) {
     $scope.id = $stateParams.id;
+    $scope.selectedCustomer = {};
+    $scope.loadCustomers = function() {
+        Customers.getList().then(
+            function(data) {
+                $scope.customers = data;
+            }
+        );
+    };
+    $scope.trustAsHtml = function(value) {
+      return $sce.trustAsHtml(value);
+    };
+    $scope.fillCustomer = function(item, model) {
+        if (!item)
+            return;
+        Customers.one(item.id).get().then(
+            function(data) {
+                for (var prop in data) {
+                    var custProp = 'customer_' + prop;
+                    if ($scope.invoice.hasOwnProperty(custProp)) {
+                        $scope.invoice[custProp] = data[prop];
+                    }
+              }
+              $scope.selectedCustomer.item = null;
+            }
+        );
+        $scope.customerSelectOpen = false;
+    };
     if ($scope.id == 'new') {
         $scope.title = 'New Invoice';
         $scope.invoice = {};

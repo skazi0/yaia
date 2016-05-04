@@ -8,7 +8,7 @@
 - [ ] Customer creation and editing
   - [x] Basic editing
   - [ ] Customer currency
-  - [ ] Language
+  - [ ] Language?
   - [ ] Invoice template
   - [ ] Bank account selection
 - [ ] User profile/settings
@@ -17,6 +17,7 @@
   - [ ] Own currency
   - [ ] Bank accounts (+optional API URL)
   - [ ] Default page sizes for item lists
+  - [ ] Next invoice number editing
 - [ ] Invoice list
   - [x] Basic list
   - [x] Server-side paging and sorting
@@ -28,7 +29,8 @@
 - [ ] Invoice creation and editing
   - [ ] Purchase / Work Order Number
   - [ ] Copy contents from previous invoices
-  - [ ] Fill customer data from selected Customer
+  - [x] Fill customer data from selected Customer
+    - [ ] Handle "new" invoice case properly
   - [ ] Due date calculation based on predefined payment terms
   - [ ] Items list
   - [ ] Tax handling (+"no tax"/"reverse charge" handling)

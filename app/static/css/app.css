@@ -14,3 +14,23 @@ table.table-left-headers th {
 .nav .user-menu-link {
     padding: 9px 16px;
 }
+
+.collapse-btn {
+    position: relative;
+}
+
+.collapse-inline.in,
+.collapse-inline.collapsing {
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    margin-right: -11px;
+    height: 24px;
+}
+
+.collapse-inline .form-control {
+    padding: 3px 8px;
+    height: 28px;
+}
