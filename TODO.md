@@ -30,7 +30,7 @@
   - [ ] Purchase / Work Order Number
   - [ ] Copy contents from previous invoices
   - [x] Fill customer data from selected Customer
-    - [ ] Handle "new" invoice case properly
+    - [x] Handle "new" invoice case properly
   - [ ] Due date calculation based on predefined payment terms
   - [ ] Items list
   - [ ] Tax handling (+"no tax"/"reverse charge" handling)

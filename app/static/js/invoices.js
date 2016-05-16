@@ -38,7 +38,7 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', 
     );
 }]);
 
-yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Customers', function($scope, $sce, $state, $stateParams, Invoices, Customers) {
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Customers', 'Restangular', function($scope, $sce, $state, $stateParams, Invoices, Customers, Restangular) {
     $scope.id = $stateParams.id;
     $scope.selectedCustomer = {};
     $scope.loadCustomers = function() {
@@ -56,12 +56,10 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
             return;
         Customers.one(item.id).get().then(
             function(data) {
+                data = Restangular.stripRestangular(data);
                 for (var prop in data) {
-                    var custProp = 'customer_' + prop;
-                    if ($scope.invoice.hasOwnProperty(custProp)) {
-                        $scope.invoice[custProp] = data[prop];
-                    }
-              }
+                    $scope.invoice['customer_' + prop] = data[prop];
+                }
               $scope.selectedCustomer.item = null;
             }
         );
