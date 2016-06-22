@@ -164,12 +164,28 @@ class Invoices(Resource):
         'customer_shipping_address': fields.String,
     }
 
+    _linefields = {
+        'id': fields.Integer,
+        'description': fields.String,
+        'quantity': fields.Fixed(2),
+        'unit_price': fields.Fixed(2),
+        'tax_rate': fields.Fixed(2),
+        'currency': fields.String,
+    }
+
     @login_required
-    @marshal_with(_fields)
     def get(self, id):
         try:
-            return Invoice.query.filter_by(
-                owner_id=current_user.get_id(), id=id).one()
+            invoice = marshal(Invoice.query.filter_by(
+                owner_id=current_user.get_id(), id=id).one(),
+                Invoices._fields)
+
+            invoice['lines'] = marshal(
+                InvoiceLine.query.filter_by(
+                    invoice_id=id).all(),
+                Invoices._linefields)
+
+            return invoice
         except NoResultFound:
             return {'message': 'invoice not found'}, 404
 
