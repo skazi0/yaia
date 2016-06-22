@@ -66,6 +66,22 @@ class Invoice(db.Model):
     customer_shipping_address = db.Column(db.Text, nullable=False)
 
 
+class InvoiceLine(db.Model):
+
+    __tablename__ = "lines"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    invoice_id = db.Column(db.Integer, ForeignKey('invoices.id'),
+                           nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    quantity = db.Column(db.Numeric(12, 2), nullable=False)
+    unit_price = db.Column(db.Numeric(12, 2), nullable=False)
+    # net_value = db.Column(db.Numeric(12, 2), nullable=False)
+    tax_rate = db.Column(db.Numeric(5, 2))
+    # value = db.Column(db.Numeric(12, 2), nullable=False)
+    currency = db.Column(db.String(3), nullable=False)
+
+
 class Customer(db.Model):
 
     __tablename__ = "customers"
