@@ -35,7 +35,7 @@ api.add_resource(InvoicesList, '/api/invoices')
 api.add_resource(Invoices, '/api/invoices/<id>')
 api.add_resource(CustomersList, '/api/customers')
 api.add_resource(Customers, '/api/customers/<id>')
-
+api.add_resource(Calculator, '/api/calculator')
 
 @app.route('/')
 def index():

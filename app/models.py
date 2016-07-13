@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from sqlalchemy import func
 from sqlalchemy.schema import ForeignKey, UniqueConstraint
 
@@ -80,6 +81,16 @@ class InvoiceLine(db.Model):
     tax_rate = db.Column(db.Numeric(5, 2))
     # value = db.Column(db.Numeric(12, 2), nullable=False)
     currency = db.Column(db.String(3), nullable=False)
+
+    @staticmethod
+    def from_dict(data):
+        line = InvoiceLine()
+        for k, v in data.iteritems():
+            if hasattr(line, k):
+                if isinstance(getattr(InvoiceLine, k).type, db.Numeric):
+                    v = Decimal(v)
+                setattr(line, k, v)
+        return line
 
 
 class Customer(db.Model):

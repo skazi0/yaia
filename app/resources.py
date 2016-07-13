@@ -7,6 +7,7 @@ import json
 
 from app import db
 from app.models import *
+from app.calculators import *
 
 
 class Users(Resource):
@@ -171,6 +172,7 @@ class Invoices(Resource):
         'unit_price': fields.Fixed(2),
         'tax_rate': fields.Fixed(2),
         'currency': fields.String,
+        'net_value': fields.Fixed(2),
     }
 
     @login_required
@@ -181,8 +183,9 @@ class Invoices(Resource):
                 Invoices._fields)
 
             invoice['lines'] = marshal(
-                InvoiceLine.query.filter_by(
-                    invoice_id=id).all(),
+                map(LineCalculator().calculate,
+                    InvoiceLine.query.filter_by(
+                        invoice_id=id).all()),
                 Invoices._linefields)
 
             return invoice
@@ -316,3 +319,19 @@ class Customers(Resource):
             return {'message': 'customer updated'}
         except NoResultFound:
             return {'message': 'customer not found'}, 404
+
+class Calculator(Resource):
+    def post(self):
+        totals = {'net': 0, 'gross': 0}
+        lines = []
+        reqdata = request.get_json()
+        calculator = LineCalculator()
+        for l in reqdata['lines']:
+            # use original state for unsaved lines
+            if 'org' in l:
+                l = l['org']
+            line = marshal(calculator.calculate(InvoiceLine.from_dict(l)), Invoices._linefields)
+            lines.append(line)
+# TODO: create totalcalculator
+#            totals['net'] += line['net_value']
+        return {'lines': lines, 'totals': totals}
