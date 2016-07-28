@@ -15,6 +15,10 @@ yaiaInvoices.factory('Invoices', ['Restangular', function (Restangular) {
     return Restangular.service('invoices');
 }]);
 
+yaiaInvoices.factory('Calculator', ['Restangular', function (Restangular) {
+    return Restangular.service('calculator');
+}]);
+
 yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', function($scope, Invoices, NgTableParams) {
     $scope.tableParams = new NgTableParams(
         {
@@ -38,7 +42,7 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', 
     );
 }]);
 
-yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Customers', 'Restangular', function($scope, $sce, $state, $stateParams, Invoices, Customers, Restangular) {
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Calculator', 'Customers', 'Restangular', 'NgTableParams', function($scope, $sce, $state, $stateParams, Invoices, Calculator, Customers, Restangular, NgTableParams) {
     $scope.id = $stateParams.id;
     $scope.selectedCustomer = {};
     $scope.loadCustomers = function() {
@@ -64,6 +68,34 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
             }
         );
         $scope.customerSelectOpen = false;
+    };
+    $scope.lineEditStart = function(row, rowForm) {
+        row.org = angular.copy(row);
+        row.isEditing = true;
+    };
+    $scope.lineEditCancel = function(row, rowForm) {
+        angular.extend(row, row.org);
+        delete row.org;
+        row.isEditing = false;
+    };
+    $scope.lineEditSave = function(row) {
+        delete row.org;
+        row.isEditing = false;
+        row.isCalculating = true;
+        Calculator.post($scope.invoice).then(
+            function(data) {
+                angular.forEach($scope.invoice.lines, function(line, index) {
+                    line.net_value = data.lines[index].net_value;
+                    delete line.isCalculating;
+                });
+            },
+            function(resp) {
+                alert("ERROR");
+            }
+        );
+    };
+    $scope.lineDelete = function(row) {
+        alert("delete" + row);
     };
     if ($scope.id == 'new') {
         $scope.title = 'New Invoice';
@@ -103,6 +135,15 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
             function(data) {
                 $scope.title = 'Edit Invoice #' + data.ref_num;
                 $scope.invoice = data;
+                $scope.tableParams = new NgTableParams(
+                    {
+                        count: data.length, // disable paging
+                    },
+                    {
+                        counts: [], // disable page sizes display
+                        data: data.lines,
+                    }
+                );
             }
         );
     }

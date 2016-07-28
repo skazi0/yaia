@@ -28,11 +28,17 @@
   - [ ] Automatic conversion of due amounts from customer currency to own currency from external API (currency history)
 - [ ] Invoice creation and editing
   - [ ] Purchase / Work Order Number
+  - [ ] Delivery date (?)
   - [ ] Copy contents from previous invoices
   - [x] Fill customer data from selected Customer
     - [x] Handle "new" invoice case properly
   - [ ] Due date calculation based on predefined payment terms
   - [ ] Items list
+    - [ ] Display of Items
+    - [x] Editing of Items
+    - [x] Re-calculation of modified items
+    - [ ] Saving of Items to the DB
+  - [ ] Totals calculation
   - [ ] Tax handling (+"no tax"/"reverse charge" handling)
   - [ ] Terms & Conditions / Notes
 - [ ] Invoice export to PDF

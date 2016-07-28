@@ -10,6 +10,21 @@ YaiaApp.config(['$stateProvider', '$urlRouterProvider', 'RestangularProvider', f
     .state('user', {abstract: true, templateUrl: 'static/views/partials/user.html', controller: 'UserCtrl', data: {access: 'user'}});
 }]);
 
+// based on https://docs.angularjs.org/error/ngModel/numfmt
+YaiaApp.directive('stringToNumber', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      ngModel.$parsers.push(function(value) {
+        return value.toFixed(2);
+      });
+      ngModel.$formatters.push(function(value) {
+        return parseFloat(value, 10);
+      });
+    }
+  };
+});
+
 YaiaApp.controller('UserCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {
     $scope.$state = $state;
     $scope.current_user = Auth.currentUser();

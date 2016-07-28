@@ -36,6 +36,50 @@
     </div>
   </div>
   <h3>Items</h3>
+  <table ng-table="tableParams" class="table table-striped table-hover table-left-headers editable-table invoice-lines-table" ng-form="tableForm">
+    <colgroup>
+      <col width="55%" />
+      <col width="10%" />
+      <col width="10%" />
+      <col width="10%" />
+      <col width="10%" />
+      <col width="5%" />
+    </colgroup>
+    <tr ng-repeat="row in invoice.lines track by row.id" ng-form="rowForm">
+      <td data-title="'Product/Service'" ng-switch="row.isEditing" ng-form="description">
+        <span ng-switch-default class="editable-text">{{row.description}}</span>
+        <div class="controls" ng-switch-when="true">
+          <input type="text" name="description" ng-model="row.description" class="editable-input form-control input-sm" required />
+        </div>
+      </td>
+      <td data-title="'Qty'" ng-switch="row.isEditing" ng-form="qty">
+        <span ng-switch-default class="editable-text">{{row.quantity}}</span>
+        <div class="controls" ng-switch-when="true">
+          <input type="number" name="qty" ng-model="row.quantity" step="0.01" min="0" class="editable-input form-control input-sm" required string-to-number />
+        </div>
+      </td>
+      <td data-title="'Unit Price'" ng-switch="row.isEditing" ng-form="unitprice">
+        <span ng-switch-default class="editable-text">{{row.currency}}&nbsp;{{row.unit_price}}</span>
+        <div class="controls" ng-switch-when="true">
+          <input type="number" name="unitprice" ng-model="row.unit_price" step="0.01" min="0" class="editable-input form-control input-sm" required string-to-number />
+        </div>
+      </td>
+      <td data-title="'VAT'" ng-switch="row.isEditing" ng-form="taxrate">
+        <span ng-switch-default class="editable-text">{{row.tax_rate}}%</span>
+        <div class="controls" ng-switch-when="true">
+          XXX
+        </div>
+      </td>
+      <td data-title="'Net Value'"><span class="readonly-text">{{row.currency}}&nbsp;{{row.net_value}}</span><i class="fa fa-spinner fa-spin" ng-show="row.isCalculating"></td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm" ng-click="lineEditSave(row, rowForm)" ng-if="row.isEditing" ng-disabled="rowForm.$pristine || rowForm.$invalid"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="button" class="btn btn-default btn-sm" ng-click="lineEditCancel(row, rowForm)" ng-if="row.isEditing"><span class="glyphicon glyphicon-remove"></span></button>
+        <button type="button" class="btn btn-default btn-sm" ng-click="lineEditStart(row)" ng-if="!row.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>
+        <button type="button" class="btn btn-danger btn-sm" ng-click="lineDelete(row)" ng-if="!row.isEditing"><span class="glyphicon glyphicon-trash"></span></button>
+      </td>
+    </tr>
+  </table>
+
   <div>{{invoice.lines}}</div>
   <h3>Terms and Conditions</h3>
   <div class="row">
