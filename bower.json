@@ -26,6 +26,7 @@
     "angular-gravatar": "^0.4.2",
     "angular-collapse": "^0.2.3",
     "ui-select": "angular-ui-select#^0.16.1",
-    "angular-sanitize": "^1.5.5"
+    "angular-sanitize": "^1.5.5",
+    "angular-file-saver": "^1.1.2"
   }
 }

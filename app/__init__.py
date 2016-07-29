@@ -28,7 +28,6 @@ login_manager.init_app(app)
 def load_user(id):
     return User.query.get(int(id))
 
-
 api.add_resource(Users, '/api/users')
 api.add_resource(Sessions, '/api/sessions')
 api.add_resource(InvoicesList, '/api/invoices')
@@ -36,6 +35,7 @@ api.add_resource(Invoices, '/api/invoices/<id>')
 api.add_resource(CustomersList, '/api/customers')
 api.add_resource(Customers, '/api/customers/<id>')
 api.add_resource(Calculator, '/api/calculator')
+api.add_resource(Exporter, '/api/export')
 
 @app.route('/')
 def index():

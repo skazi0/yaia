@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, make_response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from flask_restful import Resource, reqparse, fields, marshal_with, marshal
 from sqlalchemy.exc import IntegrityError
@@ -8,7 +8,7 @@ import json
 from app import db
 from app.models import *
 from app.calculators import *
-
+from app.pdf import *
 
 class Users(Resource):
     def post(self):
@@ -335,3 +335,11 @@ class Calculator(Resource):
 # TODO: create totalcalculator
 #            totals['net'] += line['net_value']
         return {'lines': lines, 'totals': totals}
+
+class Exporter(Resource):
+    def post(self):
+        data = request.get_json()
+        response = make_response(export_pdf('pdf.html', data))
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = "attachment; filename=%s.pdf" % data['ref_num']
+        return response
