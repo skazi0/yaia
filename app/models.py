@@ -60,6 +60,9 @@ class Invoice(db.Model):
     ref_num = db.Column(db.Integer, nullable=False)
     issued_on = db.Column(db.DateTime, nullable=False, default=func.now())
     due_on = db.Column(db.DateTime, nullable=False, default=func.now())
+    delivered_on = db.Column(db.DateTime, nullable=False, default=func.now())
+    notes = db.Column(db.Text, nullable=False, default='')
+    po_num = db.Column(db.String(63))
 
     customer_name = db.Column(db.String(255), nullable=False)
     customer_tax_id = db.Column(db.String(63))
