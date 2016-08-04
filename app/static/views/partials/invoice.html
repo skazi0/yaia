@@ -58,6 +58,12 @@
           <input type="number" name="qty" ng-model="row.quantity" step="0.01" min="0" class="editable-input form-control input-sm" required string-to-number />
         </div>
       </td>
+      <td data-title="'Unit'" ng-switch="row.isEditing" ng-form="unit">
+        <span ng-switch-default class="editable-text">{{row.unit}}</span>
+        <div class="controls" ng-switch-when="true">
+          XXX
+        </div>
+      </td>
       <td data-title="'Unit Price'" ng-switch="row.isEditing" ng-form="unitprice">
         <span ng-switch-default class="editable-text">{{row.currency}}&nbsp;{{row.unit_price}}</span>
         <div class="controls" ng-switch-when="true">

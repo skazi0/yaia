@@ -169,6 +169,7 @@ class Invoices(Resource):
         'id': fields.Integer,
         'description': fields.String,
         'quantity': fields.Fixed(2),
+        'unit': fields.String,
         'unit_price': fields.Fixed(2),
         'tax_rate': fields.Fixed(2),
         'currency': fields.String,

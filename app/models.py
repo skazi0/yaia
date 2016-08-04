@@ -81,6 +81,7 @@ class InvoiceLine(db.Model):
                            nullable=False)
     description = db.Column(db.String(255), nullable=False)
     quantity = db.Column(db.Numeric(12, 2), nullable=False)
+    unit = db.Column(db.String(10), nullable=False)
     unit_price = db.Column(db.Numeric(12, 2), nullable=False)
     # net_value = db.Column(db.Numeric(12, 2), nullable=False)
     tax_rate = db.Column(db.Numeric(5, 2))
