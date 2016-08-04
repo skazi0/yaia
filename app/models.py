@@ -17,6 +17,8 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
     next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
+    address = db.Column(db.Text, nullable=False)
+    tax_id = db.Column(db.String(63))
 
     def __init__(self, login, email, password, admin=False):
         self.login = login
