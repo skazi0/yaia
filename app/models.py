@@ -93,7 +93,7 @@ class InvoiceLine(db.Model):
         line = InvoiceLine()
         for k, v in data.iteritems():
             if hasattr(line, k):
-                if isinstance(getattr(InvoiceLine, k).type, db.Numeric):
+                if v is not None and isinstance(getattr(InvoiceLine, k).type, db.Numeric):
                     v = Decimal(v)
                 setattr(line, k, v)
         return line

@@ -1,0 +1,124 @@
+<html>
+    <head>
+    {% block head %}
+    <style type="text/css">
+        {% block style %}
+        body, html { font-family: "Helvetica Neue",Arial,sans-serif; }
+        pre { font-family: inherit; margin: 0; }
+        th, td { border: 1px solid #000000; }
+        table { width: 100%; border-collapse: collapse; }
+        td, th { padding: 0.5ex; vertical-align: top; }
+        th { background-color: #eeeeee; }
+        .leftcol { float: left; width: 49%; }
+        .rightcol { float: right; width: 49%; }
+        td.rightcol, td.leftcol { float: none; }
+        .emptycol { border: none; background: none; }
+        .righthead { width: 49%; }
+        .useraddress { font-size: 120%; }
+        .usertaxid { font-size: 120%; margin-top: 1ex; }
+        .invoicetitle { text-align: right; font-weight: bold; font-size: 160%; margin-bottom: 1ex;}
+        .datestable { float: right; clear: both; }
+        .fields { font-size: 80%; }
+        .lines { font-size: 75%; }
+        .subtotals { font-size: 80%; width: auto; float: right; }
+        .total { font-size: 90%; width: auto; float: right; }
+        .lines th, .subtotals th, .total th { text-align: center; }
+        .lines td.number, .subtotals td.number, .total td.number { text-align: right; }
+        .notes th, .notes td { min-height: 1em; font-size: 80%; }
+        .break { clear: both; height: 1em; }
+        .customertaxid { margin-top: 0.75ex; }
+        {% endblock %}
+    </style>
+    {% endblock %}
+    </head>
+    <body>
+    {% block body %}
+        <div class="leftcol">
+        <pre class="useraddress">{{ user.address }}</pre>
+        <div class="usertaxid">NIP/VAT ID: {{ user.tax_id }}</div>
+        </div>
+        <div class="rightcol righthead">
+        <div class="invoicetitle">Invoice #{{ invoice.ref_num }}</div>
+        <table class="datestable">
+        <tr><th>Issue Date</th><td>{{ invoice.issued_on|date }}</td></tr>
+        <tr><th>Due Date</th><td>{{ invoice.due_on|date }}</td></tr>
+        <tr><th>Delivery Date</th><td>{{ invoice.delivered_on|date }}</td></tr>
+        </table>
+        </div>
+
+        <div class="break"></div>
+
+        <table>
+        <tr><th>Bill To</th><th class="emptycol"></th><th>Deliver To</th></tr>
+        <tr>
+            <td class="leftcol"><pre>{{ invoice.customer_invoicing_address }}</pre>{% if invoice.customer_tax_id %}<div class="customertaxid">Tax ID: {{ invoice.customer_tax_id }}</div>{% endif %}</td>
+            <td class="emptycol"></td>
+            <td class="rightcol"><pre>{{ invoice.customer_shipping_address }}</pre></td>
+        </tr>
+        </table>
+
+        <div class="break"></div>
+
+        <table class="fields">
+            <tr>{% if invoice.po_num %}<th>PO Number</th>{% endif %}<th>Requester Contact</th></tr>
+            <tr>{% if invoice.po_num %}<td>{{ invoice.po_num }}</td>{% endif %}<td>{{ invoice.customer_contact_person }} &lt;{{ invoice.customer_email }}&gt;</td></tr>
+        </table>
+
+        <div class="break"></div>
+
+        <table class="lines">
+            <tr><th>#</th><th>Description</th><th>Qty</th><th>Unit</th><th>Unit Price</th>{% if invoice.has_tax %}<th>VAT Rate</th>{% endif %}<th>Net Value</th></tr>
+            {% for line in invoice.lines %}
+            <tr>
+                <td class="number">{{ loop.index }}</td>
+                <td>{{ line.description }}</td>
+                <td class="number">{{ line.quantity }}</td>
+                <td>{{ line.unit }}</td>
+                <td class="number">{{ line.unit_price }}</td>
+                {% if invoice.has_tax %}<td class="number">{{ (line.tax_rate + '%') if line.tax_rate is not none else '-' }}</td>{% endif %}
+                <td class="number">{{ line.net_value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if invoice.has_tax %}
+        <div class="break"></div>
+
+        <table class="subtotals">
+            <tr><th colspan="4">Subtotals</th></tr>
+            <tr><th>VAT Rate</th><th>Net Value</th><th>VAT</th><th>Value</th></tr>
+            {% for rate, values in invoice.subtotals.iteritems() %}
+            <tr>
+                <td class="number">{{ (rate + '%') if rate is not none else '-' }}</td>
+                <td class="number">{{ values['net'] }}</td>
+                <td class="number">{{ values['tax'] }}</td>
+                <td class="number">{{ values['gross'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <div class="break"></div>
+
+        <table class="total">
+            <tr><th colspan="{{ 3 if invoice.has_tax else 1 }}">Total</th></tr>
+            {% if invoice.has_tax %}<tr><th>Net Value</th><th>VAT</th><th>Value</th></tr>{% endif %}
+            <tr>
+                {% if invoice.has_tax %}
+                <td class="number">{{ invoice.currency }}&nbsp;{{ invoice.total['net'] }}</td>
+                <td class="number">{{ invoice.currency }}&nbsp;{{ invoice.total['tax'] }}</td>
+                {% endif %}
+                <td class="number">{{ invoice.currency }}&nbsp;{{ invoice.total['gross'] }}</td>
+            </tr>
+        </table>
+
+        <div class="break"></div>
+
+        <table class="notes">
+            <tr><th>Notes</th></tr>
+            <tr><td>{{ invoice.notes }}</td></tr>
+        </table>
+    {% endblock %}
+    </body>
+</html>
+

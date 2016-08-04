@@ -1,8 +1,6 @@
 from flask import render_template
-from xhtml2pdf import pisa
-from StringIO import StringIO
+from weasyprint import HTML
 
 def export_pdf(template, data):
-    pdf = StringIO()
-    pisa.CreatePDF(StringIO(render_template(template, **data)), pdf)
-    return pdf.getvalue()
+    html = render_template(template, **data)
+    return HTML(string=html).write_pdf()

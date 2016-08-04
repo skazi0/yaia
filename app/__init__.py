@@ -28,6 +28,10 @@ login_manager.init_app(app)
 def load_user(id):
     return User.query.get(int(id))
 
+@app.template_filter('date')
+def date_filter(s):
+    return s.split('T')[0] if s is not None else s
+
 api.add_resource(Users, '/api/users')
 api.add_resource(Sessions, '/api/sessions')
 api.add_resource(InvoicesList, '/api/invoices')

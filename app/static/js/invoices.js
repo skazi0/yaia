@@ -22,6 +22,7 @@ yaiaInvoices.factory('Calculator', ['Restangular', function (Restangular) {
 yaiaInvoices.factory('Exporter', ['Restangular', function (Restangular) {
     return Restangular.withConfig(function(config) {
         config.setFullResponse(true);
+        config.setDefaultHttpFields({responseType: 'blob'});
     }).service('export');
 }]);
 
@@ -48,7 +49,7 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', 
     );
 }]);
 
-yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Calculator', 'Exporter', 'Customers', 'Restangular', 'NgTableParams', 'FileSaver', 'Blob', function($scope, $sce, $state, $stateParams, Invoices, Calculator, Exporter, Customers, Restangular, NgTableParams, FileSaver, Blob) {
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Calculator', 'Exporter', 'Customers', 'Restangular', 'NgTableParams', 'FileSaver', function($scope, $sce, $state, $stateParams, Invoices, Calculator, Exporter, Customers, Restangular, NgTableParams, FileSaver) {
     $scope.id = $stateParams.id;
     $scope.selectedCustomer = {};
     $scope.loadCustomers = function() {
@@ -94,6 +95,8 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
                     line.net_value = data.lines[index].net_value;
                     delete line.isCalculating;
                 });
+                $scope.invoice.subtotals = data.subtotals;
+                $scope.invoice.total = data.total;
             },
             function(resp) {
                 alert("ERROR");
@@ -112,8 +115,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
         Exporter.post($scope.invoice).then(
             function(resp) {
                 var headers = resp.headers();
-                var bdata = new Blob([resp.data], { type: headers['content-type'] });
-                FileSaver.saveAs(bdata, extractFilename(headers));
+                FileSaver.saveAs(resp.data, extractFilename(headers));
             },
             function(resp) {
                 alert("ERROR");

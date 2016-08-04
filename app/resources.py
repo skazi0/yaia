@@ -1,14 +1,20 @@
-from flask import request, make_response
+from flask import request, send_file
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from flask_restful import Resource, reqparse, fields, marshal_with, marshal
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
+from io import BytesIO
+from collections import defaultdict
 import json
 
 from app import db
 from app.models import *
 from app.calculators import *
 from app.pdf import *
+
+# TODO: remove
+from decimal import Decimal
+# endTODO
 
 class Users(Resource):
     def post(self):
@@ -157,6 +163,9 @@ class Invoices(Resource):
         'ref_num': fields.Integer,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
+        'delivered_on': fields.DateTime(dt_format='iso8601'),
+        'po_num': fields.String,
+        'notes': fields.String,
         'customer_name': fields.String,
         'customer_tax_id': fields.String,
         'customer_contact_person': fields.String,
@@ -174,6 +183,12 @@ class Invoices(Resource):
         'tax_rate': fields.Fixed(2),
         'currency': fields.String,
         'net_value': fields.Fixed(2),
+    }
+
+    _totalfields = {
+        'net': fields.Fixed(2),
+        'tax': fields.Fixed(2),
+        'gross': fields.Fixed(2),
     }
 
     @login_required
@@ -323,7 +338,7 @@ class Customers(Resource):
 
 class Calculator(Resource):
     def post(self):
-        totals = {'net': 0, 'gross': 0}
+        subtotals = defaultdict(lambda: {'net': Decimal(0), 'tax': Decimal(0), 'gross': Decimal(0)})
         lines = []
         reqdata = request.get_json()
         calculator = LineCalculator()
@@ -333,14 +348,39 @@ class Calculator(Resource):
                 l = l['org']
             line = marshal(calculator.calculate(InvoiceLine.from_dict(l)), Invoices._linefields)
             lines.append(line)
-# TODO: create totalcalculator
-#            totals['net'] += line['net_value']
-        return {'lines': lines, 'totals': totals}
+        # TODO: create totalcalculator
+        for l in lines:
+            tax_rate = l['tax_rate']
+            subtotals[tax_rate]['net'] += Decimal(l['net_value'])
+
+        total = {'net': Decimal(0), 'tax': Decimal(0), 'gross': Decimal(0)}
+        for r, s in subtotals.iteritems():
+            if r is not None:
+                s['tax'] = fixed_mul(s['net'], Decimal(r)/Decimal(100.0))
+            s['gross'] = s['net'] + s['tax']
+
+            total['net'] += s['net']
+            total['tax'] += s['tax']
+            total['gross'] += s['gross']
+
+            subtotals[r] = marshal(s, Invoices._totalfields)
+
+        total = marshal(total, Invoices._totalfields)
+
+        return {'lines': lines, 'subtotals': subtotals, 'total': total}
 
 class Exporter(Resource):
     def post(self):
-        data = request.get_json()
-        response = make_response(export_pdf('pdf.html', data))
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = "attachment; filename=%s.pdf" % data['ref_num']
-        return response
+        invoice = request.get_json()
+
+        for l in invoice['lines']:
+            if l['tax_rate'] is not None:
+                invoice['has_tax'] = True
+            # TODO: move to invoice model
+            invoice['currency'] = l['currency']
+
+        data = {'invoice': invoice, 'user': current_user}
+        return send_file(BytesIO(export_pdf('pdf.html', data)),
+                         mimetype='application/pdf',
+                         as_attachment=True,
+                         attachment_filename='%s.pdf' % invoice['ref_num'])
