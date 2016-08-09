@@ -98,6 +98,8 @@ def invoice_args(req=None):
                         help='address to be used for invoicing')
     parser.add_argument('customer_shipping_address', type=str, required=True,
                         help='address to be used for shipping')
+    parser.add_argument('notes', type=str, required=True,
+                        help='invoice specific notes')
 
     return parser.parse_args(req)
 
