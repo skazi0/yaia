@@ -16,6 +16,7 @@ from app.pdf import *
 from decimal import Decimal
 # endTODO
 
+
 class Users(Resource):
     def post(self):
         try:
@@ -149,7 +150,10 @@ class InvoicesList(Resource):
         try:
             args = invoice_args(request)
 
-            invoice = Invoice(owner_id=current_user.get_id(), ref_num=current_user.make_next_invoice_number(), **args)
+            invoice = Invoice(
+                owner_id=current_user.get_id(),
+                ref_num=current_user.make_next_invoice_number(),
+                **args)
 
             db.session.add(invoice)
             db.session.commit()
@@ -338,9 +342,12 @@ class Customers(Resource):
         except NoResultFound:
             return {'message': 'customer not found'}, 404
 
+
 class Calculator(Resource):
     def post(self):
-        subtotals = defaultdict(lambda: {'net': Decimal(0), 'tax': Decimal(0), 'gross': Decimal(0)})
+        subtotals = defaultdict(lambda: {'net': Decimal(0),
+                                         'tax': Decimal(0),
+                                         'gross': Decimal(0)})
         lines = []
         reqdata = request.get_json()
         calculator = LineCalculator()
@@ -348,7 +355,10 @@ class Calculator(Resource):
             # use original state for unsaved lines
             if 'org' in l:
                 l = l['org']
-            line = marshal(calculator.calculate(InvoiceLine.from_dict(l)), Invoices._linefields)
+            line = marshal(
+                calculator.calculate(InvoiceLine.from_dict(l)),
+                Invoices._linefields
+            )
             lines.append(line)
         # TODO: create totalcalculator
         for l in lines:
@@ -370,6 +380,7 @@ class Calculator(Resource):
         total = marshal(total, Invoices._totalfields)
 
         return {'lines': lines, 'subtotals': subtotals, 'total': total}
+
 
 class Exporter(Resource):
     def post(self):
