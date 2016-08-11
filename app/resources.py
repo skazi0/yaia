@@ -112,6 +112,7 @@ class InvoicesList(Resource):
         'customer_name': fields.String,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
+        'sent_on': fields.DateTime(dt_format='iso8601'),
     }
 
     @login_required
@@ -142,7 +143,7 @@ class InvoicesList(Resource):
                 args['count']).offset(
                     (args['page']-1) * args['count'])
 
-        return {'items': marshal(query.all(), Invoices._fields),
+        return {'items': marshal(query.all(), InvoicesList._fields),
                 'totalItemCount': totalQuery.count()}
 
     @login_required
@@ -170,6 +171,7 @@ class Invoices(Resource):
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
         'delivered_on': fields.DateTime(dt_format='iso8601'),
+        'sent_on': fields.DateTime(dt_format='iso8601'),
         'po_num': fields.String,
         'notes': fields.String,
         'customer_name': fields.String,

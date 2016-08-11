@@ -61,6 +61,7 @@ class Invoice(db.Model):
     issued_on = db.Column(db.DateTime, nullable=False, default=func.now())
     due_on = db.Column(db.DateTime, nullable=False, default=func.now())
     delivered_on = db.Column(db.DateTime, nullable=False, default=func.now())
+    sent_on = db.Column(db.DateTime)
     notes = db.Column(db.Text, nullable=False, default='')
     po_num = db.Column(db.String(63))
 
