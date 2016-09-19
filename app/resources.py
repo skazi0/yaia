@@ -4,17 +4,12 @@ from flask_restful import Resource, reqparse, fields, marshal_with, marshal
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from io import BytesIO
-from collections import defaultdict
 import json
 
 from app import db
 from app.models import *
 from app.calculators import *
 from app.pdf import *
-
-# TODO: remove
-from decimal import Decimal
-# endTODO
 
 
 class Users(Resource):
@@ -212,6 +207,15 @@ class Invoices(Resource):
                         invoice_id=id).all()),
                 Invoices._linefields)
 
+            total_calculator = TotalCalculator()
+            (subtotals, total) = total_calculator.calculate(invoice['lines'])
+
+            invoice['subtotals'] = {}
+            for r, s in subtotals.iteritems():
+                invoice['subtotals'][r] = marshal(s, Invoices._totalfields)
+
+            invoice['total'] = marshal(total, Invoices._totalfields)
+
             return invoice
         except NoResultFound:
             return {'message': 'invoice not found'}, 404
@@ -347,9 +351,6 @@ class Customers(Resource):
 
 class Calculator(Resource):
     def post(self):
-        subtotals = defaultdict(lambda: {'net': Decimal(0),
-                                         'tax': Decimal(0),
-                                         'gross': Decimal(0)})
         lines = []
         reqdata = request.get_json()
         calculator = LineCalculator()
@@ -362,21 +363,11 @@ class Calculator(Resource):
                 Invoices._linefields
             )
             lines.append(line)
-        # TODO: create totalcalculator
-        for l in lines:
-            tax_rate = l['tax_rate']
-            subtotals[tax_rate]['net'] += Decimal(l['net_value'])
 
-        total = {'net': Decimal(0), 'tax': Decimal(0), 'gross': Decimal(0)}
+        total_calculator = TotalCalculator()
+        (subtotals, total) = total_calculator.calculate(lines)
+
         for r, s in subtotals.iteritems():
-            if r is not None:
-                s['tax'] = fixed_mul(s['net'], Decimal(r)/Decimal(100.0))
-            s['gross'] = s['net'] + s['tax']
-
-            total['net'] += s['net']
-            total['tax'] += s['tax']
-            total['gross'] += s['gross']
-
             subtotals[r] = marshal(s, Invoices._totalfields)
 
         total = marshal(total, Invoices._totalfields)
