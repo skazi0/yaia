@@ -108,6 +108,7 @@ class InvoicesList(Resource):
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
         'sent_on': fields.DateTime(dt_format='iso8601'),
+        'paid_on': fields.DateTime(dt_format='iso8601'),
     }
 
     @login_required
@@ -167,6 +168,7 @@ class Invoices(Resource):
         'due_on': fields.DateTime(dt_format='iso8601'),
         'delivered_on': fields.DateTime(dt_format='iso8601'),
         'sent_on': fields.DateTime(dt_format='iso8601'),
+        'paid_on': fields.DateTime(dt_format='iso8601'),
         'po_num': fields.String,
         'notes': fields.String,
         'customer_name': fields.String,
