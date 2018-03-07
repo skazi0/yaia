@@ -16,11 +16,11 @@ class Users(Resource):
     def post(self):
         try:
             parser = reqparse.RequestParser()
-            parser.add_argument('login', type=str, required=True,
+            parser.add_argument('login', required=True,
                                 help='login for the new user')
-            parser.add_argument('email', type=str, required=True,
+            parser.add_argument('email', required=True,
                                 help='email address for the new user')
-            parser.add_argument('password', type=str, required=True,
+            parser.add_argument('password', required=True,
                                 help='password for the new user')
             args = parser.parse_args()
 
@@ -52,9 +52,9 @@ class Sessions(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('login', type=str, required=True,
+        parser.add_argument('login', required=True,
                             help='login for the user')
-        parser.add_argument('password', type=str, required=True,
+        parser.add_argument('password', required=True,
                             help='password for the user')
         args = parser.parse_args()
 
@@ -82,19 +82,19 @@ class Sessions(Resource):
 def invoice_args(req=None):
     parser = reqparse.RequestParser()
 
-    parser.add_argument('customer_name', type=str, required=True,
+    parser.add_argument('customer_name', required=True,
                         help='customer name')
-    parser.add_argument('customer_tax_id', type=str, required=False,
+    parser.add_argument('customer_tax_id', required=False,
                         help='legal ID')
-    parser.add_argument('customer_contact_person', type=str, required=False,
+    parser.add_argument('customer_contact_person', required=False,
                         help='name of the contact person')
-    parser.add_argument('customer_email', type=str, required=False,
+    parser.add_argument('customer_email', required=False,
                         help='email address')
-    parser.add_argument('customer_invoicing_address', type=str, required=True,
+    parser.add_argument('customer_invoicing_address', required=True,
                         help='address to be used for invoicing')
-    parser.add_argument('customer_shipping_address', type=str, required=True,
+    parser.add_argument('customer_shipping_address', required=True,
                         help='address to be used for shipping')
-    parser.add_argument('notes', type=str,
+    parser.add_argument('notes',
                         help='invoice specific notes')
 
     return parser.parse_args(req)
@@ -255,17 +255,17 @@ class Invoices(Resource):
 def customer_args(req=None):
     parser = reqparse.RequestParser()
 
-    parser.add_argument('name', type=str, required=True,
+    parser.add_argument('name', required=True,
                         help='customer name')
-    parser.add_argument('tax_id', type=str, required=False,
+    parser.add_argument('tax_id', required=False,
                         help='legal ID')
-    parser.add_argument('contact_person', type=str, required=False,
+    parser.add_argument('contact_person', required=False,
                         help='name of the contact person')
-    parser.add_argument('email', type=str, required=False,
+    parser.add_argument('email', required=False,
                         help='email address')
-    parser.add_argument('invoicing_address', type=str, required=True,
+    parser.add_argument('invoicing_address', required=True,
                         help='address to be used for invoicing')
-    parser.add_argument('shipping_address', type=str, required=True,
+    parser.add_argument('shipping_address', required=True,
                         help='address to be used for shipping')
     return parser.parse_args(req)
 
