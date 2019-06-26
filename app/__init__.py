@@ -1,8 +1,8 @@
 from flask import Flask, render_template
-from flask.ext.bower import Bower
-from flask.ext.bcrypt import Bcrypt
-from flask.ext.sqlalchemy import SQLAlchemy as SQLAlchemyBase
-from flask.ext.login import LoginManager
+from flask_bower import Bower
+from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy as SQLAlchemyBase
+from flask_login import LoginManager
 from flask_restful import Api
 
 from app.config import BaseConfig
