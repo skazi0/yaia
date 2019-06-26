@@ -14,7 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.0",
     "restangular": "^1.5.2",
     "angular-ui-router": "^0.2.18",
     "angular": "^1.5.5",

@@ -26,7 +26,7 @@ class TotalCalculator(object):
             tax_rate = l['tax_rate']
             subtotals[tax_rate]['net'] += Decimal(l['net_value'])
 
-        for r, s in subtotals.iteritems():
+        for r, s in subtotals.items():
             if r is not None:
                 s['tax'] = fixed_mul(s['net'], Decimal(r)/Decimal(100.0))
             s['gross'] = s['net'] + s['tax']

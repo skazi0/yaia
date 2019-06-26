@@ -93,7 +93,7 @@ class InvoiceLine(db.Model):
     @staticmethod
     def from_dict(data):
         line = InvoiceLine()
-        for k, v in data.iteritems():
+        for k, v in data.items():
             if hasattr(line, k):
                 if (v is not None and
                    isinstance(getattr(InvoiceLine, k).type, db.Numeric)):

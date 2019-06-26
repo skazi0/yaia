@@ -127,7 +127,7 @@ class InvoicesList(Resource):
 
         # sorting param
         if args['sorting'] is not None:
-            for name, direction in args['sorting'].iteritems():
+            for name, direction in args['sorting'].items():
                 # sanitize by looking up fields/directions in models
                 fieldobj = getattr(Invoice, name)
                 dirobj = getattr(fieldobj, direction)()
@@ -204,16 +204,16 @@ class Invoices(Resource):
                 Invoices._fields)
 
             invoice['lines'] = marshal(
-                map(LineCalculator().calculate,
+                list(map(LineCalculator().calculate,
                     InvoiceLine.query.filter_by(
-                        invoice_id=id).all()),
+                        invoice_id=id).all())),
                 Invoices._linefields)
 
             total_calculator = TotalCalculator()
             (subtotals, total) = total_calculator.calculate(invoice['lines'])
 
             invoice['subtotals'] = {}
-            for r, s in subtotals.iteritems():
+            for r, s in subtotals.items():
                 invoice['subtotals'][r] = marshal(s, Invoices._totalfields)
 
             invoice['total'] = marshal(total, Invoices._totalfields)
@@ -369,7 +369,7 @@ class Calculator(Resource):
         total_calculator = TotalCalculator()
         (subtotals, total) = total_calculator.calculate(lines)
 
-        for r, s in subtotals.iteritems():
+        for r, s in subtotals.items():
             subtotals[r] = marshal(s, Invoices._totalfields)
 
         total = marshal(total, Invoices._totalfields)
