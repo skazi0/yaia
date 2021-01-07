@@ -24,8 +24,8 @@ def upgrade():
     op.bulk_insert(
         series_table,
         [
-            {'id': 0, 'name': 'Normal'},
-            {'id': 1, 'name': 'Prepaid'},
+            {'name': 'Normal'},
+            {'name': 'Prepaid'},
         ]
     )
     ### end Alembic commands ###
