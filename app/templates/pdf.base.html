@@ -87,7 +87,7 @@
         <table class="subtotals">
             <tr><th colspan="4">Subtotals</th></tr>
             <tr><th>VAT Rate</th><th>Net Value</th><th>VAT</th><th>Value</th></tr>
-            {% for rate, values in invoice.subtotals.iteritems() %}
+            {% for rate, values in invoice.subtotals.items() %}
             <tr>
                 <td class="number">{{ (rate + '%') if rate is not none else '-' }}</td>
                 <td class="number">{{ values['net'] }}</td>
