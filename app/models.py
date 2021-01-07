@@ -56,7 +56,10 @@ class Series(db.Model):
     __tablename__ = "series"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(64), nullable=False)
+    next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
+
 
 class Invoice(db.Model):
 

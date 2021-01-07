@@ -21,13 +21,6 @@ def upgrade():
     sa.Column('name', sa.String(length=64), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.bulk_insert(
-        series_table,
-        [
-            {'name': 'Normal'},
-            {'name': 'Prepaid'},
-        ]
-    )
     ### end Alembic commands ###
 
 
