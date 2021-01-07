@@ -6,6 +6,16 @@ from sqlalchemy.schema import ForeignKey, UniqueConstraint
 from app import db, bcrypt
 
 
+class Series(db.Model):
+
+    __tablename__ = "series"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
+    name = db.Column(db.String(64), nullable=False)
+    next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
+
+
 class User(db.Model):
 
     __tablename__ = "users"
@@ -16,7 +26,6 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
-    next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
     address = db.Column(db.Text, nullable=False)
     tax_id = db.Column(db.String(63))
 
@@ -45,20 +54,15 @@ class User(db.Model):
     def __repr__(self):
         return '<User {0}>'.format(self.login)
 
-    def make_next_invoice_number(self):
-        num = self.next_invoice_num
-        self.next_invoice_num += 1
+    def make_next_invoice_number(self, series='Normal'):
+        series = Series.query.filter_by(user_id=self.id, name=series).one()
+
+        num = series.next_invoice_num
+        series.next_invoice_num += 1
+
+        db.session.commit()
+
         return num
-
-
-class Series(db.Model):
-
-    __tablename__ = "series"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
-    name = db.Column(db.String(64), nullable=False)
-    next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
 
 
 class Invoice(db.Model):
