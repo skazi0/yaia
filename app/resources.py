@@ -147,9 +147,14 @@ class InvoicesList(Resource):
         try:
             args = invoice_args(request)
 
+            series = Series.query.filter_by(
+                user_id=current_user.get_id(),
+                name='Normal').one()
+
             invoice = Invoice(
                 owner_id=current_user.get_id(),
                 ref_num=current_user.make_next_invoice_number(),
+                series_id=series.id
                 **args)
 
             db.session.add(invoice)

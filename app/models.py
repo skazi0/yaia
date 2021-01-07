@@ -54,13 +54,11 @@ class User(db.Model):
     def __repr__(self):
         return '<User {0}>'.format(self.login)
 
-    def make_next_invoice_number(self, series='Normal'):
-        series = Series.query.filter_by(user_id=self.id, name=series).one()
+    def make_next_invoice_number(self, series_name='Normal'):
+        series = Series.query.filter_by(user_id=self.id, name=series_name).one()
 
         num = series.next_invoice_num
         series.next_invoice_num += 1
-
-        db.session.commit()
 
         return num
 
