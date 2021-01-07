@@ -1,6 +1,8 @@
 env
 venv
 bower_components
+node_modules
+package-lock.json
 __pycahe__
 *.pyc
 *.sqlite

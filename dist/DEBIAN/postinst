@@ -4,5 +4,6 @@ set -e
 chown www-data:www-data /opt/yaia /var/log/yaia
 chmod 0770 /opt/yaia
 chmod 0755 /var/log/yaia
+chmod 0640 /etc/uwsgi/apps-available/yaia.ini
 
 exit 0
