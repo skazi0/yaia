@@ -51,6 +51,13 @@ class User(db.Model):
         return num
 
 
+class Series(db.Model):
+
+    __tablename__ = "series"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(64), nullable=False)
+
 class Invoice(db.Model):
 
     __tablename__ = "invoices"
