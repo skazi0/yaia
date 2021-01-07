@@ -6,4 +6,11 @@ chmod 0770 /opt/yaia
 chmod 0755 /var/log/yaia
 chmod 0640 /etc/uwsgi/apps-available/yaia.ini
 
+# TODO: create venv and install deps here
+
+# TODO: run these steps only if configured
+export YAIA_CONFIG=/opt/yaia/yaia.cfg
+# migrate database
+/opt/yaia/venv/bin/python /opt/yaia/manage.py db upgrade
+
 exit 0
