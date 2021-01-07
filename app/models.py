@@ -67,6 +67,7 @@ class Invoice(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     owner_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
+    series_id = db.Column(db.Integer, ForeignKey('series.id'), nullable=False)
     ref_num = db.Column(db.Integer, nullable=False)
     issued_on = db.Column(db.DateTime, nullable=False, default=func.now())
     due_on = db.Column(db.DateTime, nullable=False, default=func.now())
