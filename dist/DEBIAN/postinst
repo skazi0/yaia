@@ -11,6 +11,7 @@ chmod 0640 /etc/uwsgi/apps-available/yaia.ini
 # TODO: run these steps only if configured
 export YAIA_CONFIG=/opt/yaia/yaia.cfg
 # migrate database
-/opt/yaia/venv/bin/python /opt/yaia/manage.py db upgrade
+cd /opt/yaia
+venv/bin/python manage.py db upgrade
 
 exit 0
