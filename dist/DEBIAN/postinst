@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+chown www-data:www-data /opt/yaia /var/log/yaia
+chmod 0770 /opt/yaia
+chmod 0755 /var/log/yaia
+
+exit 0
