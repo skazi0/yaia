@@ -102,6 +102,7 @@ class InvoiceLine(db.Model):
     tax_rate = db.Column(db.Numeric(5, 2))
     # value = db.Column(db.Numeric(12, 2), nullable=False)
     currency = db.Column(db.String(3), nullable=False)
+    is_prepaid = db.Column(db.Boolean, default=False, nullable=False)
 
     @staticmethod
     def from_dict(data):
