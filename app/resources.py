@@ -409,7 +409,13 @@ class Exporter(Resource):
             # TODO: move to invoice model
             invoice['currency'] = l['currency']
 
-        data = {'invoice': invoice, 'user': current_user}
+        series = Series.query.filter_by(
+            user_id=current_user.get_id(), id=invoice['series_id']).one()
+
+        # TODO: make it nicer?
+        invoice['is_prepayment'] = series.name == 'Prepayment'
+
+        data = {'invoice': invoice, 'user': current_user, 'series': series}
         return send_file(BytesIO(export_pdf('pdf.html', data)),
                          mimetype='application/pdf',
                          as_attachment=True,

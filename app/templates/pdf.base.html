@@ -38,11 +38,12 @@
         <div class="usertaxid">NIP/VAT ID: {{ user.tax_id }}</div>
         </div>
         <div class="rightcol righthead">
-        <div class="invoicetitle">Invoice #{{ invoice.ref_num }}</div>
+        <div class="invoicetitle">{% if invoice.is_prepayment %}Prepayment {% endif %}Invoice #{{ invoice.series_prefix }}{{ invoice.ref_num }}</div>
         <table class="datestable">
         <tr><th>Issue Date</th><td>{{ invoice.issued_on|date }}</td></tr>
-        <tr><th>Due Date</th><td>{{ invoice.due_on|date }}</td></tr>
-        <tr><th>Delivery Date</th><td>{{ invoice.delivered_on|date }}</td></tr>
+        {% if not invoice.is_prepayment %}<tr><th>Due Date</th><td>{{ invoice.due_on|date }}</td></tr>{% endif %}
+        {% if not invoice.is_prepayment %}<tr><th>Delivery Date</th><td>{{ invoice.delivered_on|date }}</td></tr>{% endif %}
+        {% if invoice.is_prepayment %}<tr><th>Paid Date</th><td>{{ invoice.paid_on|date }}</td></tr>{% endif %}
         </table>
         </div>
 
