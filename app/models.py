@@ -13,6 +13,7 @@ class Series(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(64), nullable=False)
+    prefix = db.Column(db.String(16), nullable=False, default='')
     next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
 
 
@@ -70,6 +71,7 @@ class Invoice(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     owner_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     series_id = db.Column(db.Integer, ForeignKey('series.id'), nullable=False)
+    series_prefix = db.Column(db.String(16), nullable=False, default='')
     ref_num = db.Column(db.Integer, nullable=False)
     issued_on = db.Column(db.DateTime, nullable=False, default=func.now())
     due_on = db.Column(db.DateTime, nullable=False, default=func.now())
