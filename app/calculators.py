@@ -11,7 +11,10 @@ def fixed_mul(x, y):
 
 class LineCalculator(object):
     def calculate(self, line):
-        line.net_value = fixed_mul(line.quantity, line.unit_price)
+        if line.is_prepaid:
+            line.net_value = line.unit_price
+        else:
+            line.net_value = fixed_mul(line.quantity, line.unit_price)
         return line
 
 

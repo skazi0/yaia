@@ -24,6 +24,7 @@
         .total { font-size: 90%; width: auto; float: right; }
         .lines th, .subtotals th, .total th { text-align: center; }
         .lines td.number, .subtotals td.number, .total td.number { text-align: right; }
+        .lines td.text, .lines th.text { width: 100%; text-align: left; }
         .notes th, .notes td { min-height: 1em; font-size: 80%; }
         .break { clear: both; height: 1em; }
         .customertaxid { margin-top: 0.75ex; }
@@ -68,14 +69,16 @@
         <div class="break"></div>
 
         <table class="lines">
-            <tr><th>#</th><th>Description</th><th>Qty</th><th>Unit</th><th>Unit Price</th>{% if invoice.has_tax %}<th>VAT Rate</th>{% endif %}<th>Net Value</th></tr>
+            <tr><th>#</th><th class="text">Description</th>{% if not invoice.is_prepayment %}<th>Qty</th><th>Unit</th><th>Unit Price</th>{% endif %}{% if invoice.has_tax %}<th>VAT Rate</th>{% endif %}<th>Net Value</th></tr>
             {% for line in invoice.lines %}
             <tr>
-                <td class="number">{{ loop.index }}</td>
-                <td>{{ line.description }}</td>
-                <td class="number">{{ line.quantity }}</td>
-                <td>{{ line.unit }}</td>
-                <td class="number">{{ line.unit_price }}</td>
+                <td class="number index">{{ loop.index }}</td>
+                <td class="text">{{ line.description }}</td>
+                {% if not invoice.is_prepayment %}
+                <td class="number">{% if not line.is_prepaid %}{{ line.quantity }}{% endif %}</td>
+                <td>{% if not line.is_prepaid %}{{ line.unit }}{% endif %}</td>
+                <td class="number">{% if not line.is_prepaid %}{{ line.unit_price }}{% endif %}</td>
+                {% endif %}
                 {% if invoice.has_tax %}<td class="number">{{ (line.tax_rate + '%') if line.tax_rate is not none else '-' }}</td>{% endif %}
                 <td class="number">{{ line.net_value }}</td>
             </tr>

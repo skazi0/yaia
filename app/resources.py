@@ -198,6 +198,7 @@ class Invoices(Resource):
         'tax_rate': fields.Fixed(2),
         'currency': fields.String,
         'net_value': fields.Fixed(2),
+        'is_prepaid': fields.Boolean,
     }
 
     _totalfields = {
@@ -419,4 +420,4 @@ class Exporter(Resource):
         return send_file(BytesIO(export_pdf('pdf.html', data)),
                          mimetype='application/pdf',
                          as_attachment=True,
-                         attachment_filename='%s.pdf' % invoice['ref_num'])
+                         attachment_filename='%s%s.pdf' % (invoice['series_prefix'], invoice['ref_num']))
