@@ -19,7 +19,7 @@ Flask-SQLAlchemy==2.1
 html5lib==1.0.1
 itsdangerous==0.24
 Jinja2==2.10.1
-lxml==4.3.4
+lxml==4.6.2
 Mako==1.0.3
 MarkupSafe==0.23
 Pillow==7.1.0
