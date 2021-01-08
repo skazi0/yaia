@@ -1,18 +1,28 @@
 <h1>{{title}}</h1>
 <form ng-submit="save()">
-  <h3>Customer
-    <div class="btn btn-default collapse-btn">
-      <span ng-click="customerSelectOpen=!customerSelectOpen"><i class="glyphicon glyphicon-th-list"></i> Select</span>
-      <div ng-collapse="!customerSelectOpen" collapse-options="{horizontal: true, duration: '0.1s'}" class="collapse-inline">
-        <ui-select ng-model="selectedCustomer.item" on-select="fillCustomer($item, $model)">
-          <ui-select-match placeholder="Customer for this invoice...">{{$select.selected.name}}</ui-select-match>
-          <ui-select-choices repeat="customer in customers | filter: $select.search" refresh="loadCustomers()" refresh-delay="0">
-             <div ng-bind-html="trustAsHtml((customer.name | highlight: $select.search))"></div>
-          </ui-select-choices>
-        </ui-select>
+  <div class="row">
+    <h3 class="form-group col-md-7">Customer
+      <div class="btn btn-default collapse-btn">
+        <span ng-click="customerSelectOpen=!customerSelectOpen"><i class="glyphicon glyphicon-th-list"></i> Select</span>
+        <div ng-collapse="!customerSelectOpen" collapse-options="{horizontal: true, duration: '0.1s'}" class="collapse-inline">
+          <ui-select ng-model="selectedCustomer.item" on-select="fillCustomer($item, $model)">
+            <ui-select-match placeholder="Customer for this invoice...">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="customer in customers | filter: $select.search" refresh="loadCustomers()" refresh-delay="0">
+               <div ng-bind-html="trustAsHtml((customer.name | highlight: $select.search))"></div>
+            </ui-select-choices>
+          </ui-select>
+        </div>
       </div>
-    </div>
-  </h3>
+    </h3>
+    <h3 class="form-group col-md-4">
+      <ui-select ng-model="selectedSeries.item" on-select="setSeries($item, $model)">
+        <ui-select-match placeholder="Series...">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="series in allSeries" refresh="loadSeries()" refresh-delay="0">
+          <div ng-bind-html="trustAsHtml(series.name)"></div>
+        </ui-select-choices>
+      </ui-select>
+    </h3>
+  </div>
   <div class="row">
     <div class="form-group col-md-7">
       <input type="text" class="form-control" id="name" placeholder="Name of the customer" ng-model="invoice.customer_name">

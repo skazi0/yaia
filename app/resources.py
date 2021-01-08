@@ -82,6 +82,8 @@ class Sessions(Resource):
 def invoice_args(req=None):
     parser = reqparse.RequestParser()
 
+    parser.add_argument('series_id', required=True,
+                        help='series ID')
     parser.add_argument('customer_name', required=True,
                         help='customer name')
     parser.add_argument('customer_tax_id', required=False,
@@ -104,6 +106,7 @@ class InvoicesList(Resource):
     _fields = {
         'id': fields.Integer,
         'ref_num': fields.Integer,
+        'series_id': fields.Integer,
         'customer_name': fields.String,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
@@ -147,14 +150,9 @@ class InvoicesList(Resource):
         try:
             args = invoice_args(request)
 
-            series = Series.query.filter_by(
-                user_id=current_user.get_id(),
-                name='Normal').one()
-
             invoice = Invoice(
                 owner_id=current_user.get_id(),
-                ref_num=current_user.make_next_invoice_number(),
-                series_id=series.id
+                ref_num=current_user.make_next_invoice_number(args.series_id),
                 **args)
 
             db.session.add(invoice)
@@ -169,6 +167,7 @@ class Invoices(Resource):
     _fields = {
         'id': fields.Integer,
         'ref_num': fields.Integer,
+        'series_id': fields.Integer,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
         'delivered_on': fields.DateTime(dt_format='iso8601'),
@@ -354,6 +353,18 @@ class Customers(Resource):
             return {'message': 'customer updated'}
         except NoResultFound:
             return {'message': 'customer not found'}, 404
+
+
+class SeriesList(Resource):
+    _fields = {
+        'id': fields.Integer,
+        'name': fields.String,
+    }
+
+    @login_required
+    @marshal_with(_fields)
+    def get(self):
+        return Series.query.filter_by(user_id=current_user.get_id()).all()
 
 
 class Calculator(Resource):

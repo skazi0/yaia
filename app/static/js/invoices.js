@@ -11,6 +11,10 @@ yaiaInvoices.config(['$stateProvider', '$urlRouterProvider', function ($statePro
         resolve: { $title: function() { return 'Invoices'; }}});
 }]);
 
+yaiaInvoices.factory('Series', ['Restangular', function (Restangular) {
+    return Restangular.service('series');
+}]);
+
 yaiaInvoices.factory('Invoices', ['Restangular', function (Restangular) {
     return Restangular.service('invoices');
 }]);
@@ -49,8 +53,31 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', 
     );
 }]);
 
-yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Calculator', 'Exporter', 'Customers', 'Restangular', 'NgTableParams', 'FileSaver', function($scope, $sce, $state, $stateParams, Invoices, Calculator, Exporter, Customers, Restangular, NgTableParams, FileSaver) {
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Calculator', 'Exporter', 'Customers', 'Series', 'Restangular', 'NgTableParams', 'FileSaver', function($scope, $sce, $state, $stateParams, Invoices, Calculator, Exporter, Customers, Series, Restangular, NgTableParams, FileSaver) {
     $scope.id = $stateParams.id;
+    $scope.selectedSeries = {};
+    $scope.loadSeries = function() {
+        Series.getList().then(
+            function(data) {
+                $scope.allSeries = Restangular.stripRestangular(data);
+                // TODO: preselect "Normal" instead of the first one
+                if (!$scope.invoice.series_id) {
+                    $scope.invoice.series_id = $scope.allSeries[0].id;
+                }
+
+                angular.forEach($scope.allSeries, function(s) {
+                    if (s.id == $scope.invoice.series_id) {
+                        $scope.selectedSeries.item = s;
+                    }
+                });
+            }
+        );
+    };
+    $scope.setSeries = function(item, model) {
+        if (!item)
+            return;
+        $scope.invoice.series_id = item.id;
+    };
     $scope.selectedCustomer = {};
     $scope.loadCustomers = function() {
         Customers.getList().then(
