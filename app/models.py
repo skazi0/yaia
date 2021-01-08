@@ -16,6 +16,12 @@ class Series(db.Model):
     prefix = db.Column(db.String(16), nullable=False, default='')
     next_invoice_num = db.Column(db.Integer, nullable=False, default=1)
 
+    def make_next_invoice_number(self):
+        num = self.next_invoice_num
+        self.next_invoice_num += 1
+
+        return num
+
 
 class User(db.Model):
 
@@ -54,14 +60,6 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {0}>'.format(self.login)
-
-    def make_next_invoice_number(self, series_id):
-        series = Series.query.filter_by(user_id=self.id, id=series_id).one()
-
-        num = series.next_invoice_num
-        series.next_invoice_num += 1
-
-        return num
 
 
 class Invoice(db.Model):

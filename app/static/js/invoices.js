@@ -186,7 +186,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
         };
         Invoices.one($scope.id).get().then(
             function(data) {
-                $scope.title = 'Edit Invoice #' + data.ref_num;
+                $scope.title = 'Edit Invoice #' + data.series_prefix+data.ref_num;
                 $scope.invoice = data;
                 $scope.tableParams = new NgTableParams(
                     {

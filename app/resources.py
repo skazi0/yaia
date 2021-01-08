@@ -107,6 +107,7 @@ class InvoicesList(Resource):
         'id': fields.Integer,
         'ref_num': fields.Integer,
         'series_id': fields.Integer,
+        'series_prefix': fields.String,
         'customer_name': fields.String,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
@@ -150,9 +151,13 @@ class InvoicesList(Resource):
         try:
             args = invoice_args(request)
 
+            series = Series.query.filter_by(
+                user_id=current_user.get_id(), id=args.series_id).one()
+
             invoice = Invoice(
                 owner_id=current_user.get_id(),
-                ref_num=current_user.make_next_invoice_number(args.series_id),
+                ref_num=series.make_next_invoice_number(),
+                series_prefix=series.prefix,
                 **args)
 
             db.session.add(invoice)
@@ -168,6 +173,7 @@ class Invoices(Resource):
         'id': fields.Integer,
         'ref_num': fields.Integer,
         'series_id': fields.Integer,
+        'series_prefix': fields.String,
         'issued_on': fields.DateTime(dt_format='iso8601'),
         'due_on': fields.DateTime(dt_format='iso8601'),
         'delivered_on': fields.DateTime(dt_format='iso8601'),
