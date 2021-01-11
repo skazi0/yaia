@@ -3,9 +3,9 @@
 <tr ng-repeat="row in $data track by row.id" ui-sref="user.invoices({id: row.id})" role="button">
 <td data-title="'Number'" sortable="'ref_num'">{{row.series_prefix}}{{row.ref_num}}</td>
 <td data-title="'Customer'" sortable="'customer_name'">{{row.customer_name}}</td>
-<td data-title="'Issued On'" sortable="'issued_on'">{{row.issued_on}}</td>
-<td data-title="'Due On'" sortable="'due_on'">{{row.due_on}}</td>
-<td data-title="'Sent On'" sortable="'sent_on'">{{row.sent_on}}</td>
-<td data-title="'Paid On'" sortable="'paid_on'">{{row.paid_on}}</td>
+<td data-title="'Issued On'" sortable="'issued_on'">{{row.issued_on | date:'yyyy-MM-dd'}}</td>
+<td data-title="'Due On'" sortable="'due_on'">{{row.due_on | date:'yyyy-MM-dd'}}</td>
+<td data-title="'Sent On'" sortable="'sent_on'">{{row.sent_on | date:'yyyy-MM-dd HH:mm'}}</td>
+<td data-title="'Paid On'" sortable="'paid_on'">{{row.paid_on | date:'yyyy-MM-dd'}}</td>
 </tr>
 </table>

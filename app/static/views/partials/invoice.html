@@ -105,6 +105,13 @@
       <textarea class="form-control" id="terms" rows="3" placeholder="Invoice specific text" ng-model="invoice.notes"></textarea>
     </div>
   </div>
+  <div class="row">
+    <div class="checkbox col-md-5">
+      <label>
+        <input type="checkbox" ng-model="isSent" ng-change="setSent()"/> Sent
+      </label>
+    </div>
+  </div>
   <button type="submit" class="btn btn-primary">Save</button>
   <button type="button" class="btn btn-default" ng-click="export()">Export</button>
   <button type="button" class="btn btn-danger pull-right" ng-click="remove()" ng-show="invoice.id"><i class="glyphicon glyphicon-remove"></i> Delete</button>

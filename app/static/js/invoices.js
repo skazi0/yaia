@@ -53,7 +53,7 @@ yaiaInvoices.controller('InvoicesCtrl', ['$scope', 'Invoices', 'NgTableParams', 
     );
 }]);
 
-yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', 'Invoices', 'Calculator', 'Exporter', 'Customers', 'Series', 'Restangular', 'NgTableParams', 'FileSaver', function($scope, $sce, $state, $stateParams, Invoices, Calculator, Exporter, Customers, Series, Restangular, NgTableParams, FileSaver) {
+yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParams', '$filter', 'Invoices', 'Calculator', 'Exporter', 'Customers', 'Series', 'Restangular', 'NgTableParams', 'FileSaver', function($scope, $sce, $state, $stateParams, $filter, Invoices, Calculator, Exporter, Customers, Series, Restangular, NgTableParams, FileSaver) {
     $scope.id = $stateParams.id;
     $scope.selectedSeries = {};
     $scope.loadSeries = function() {
@@ -149,10 +149,16 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
             }
         );
     };
+    $scope.setSent = function() {
+        if ($scope.isSent) {
+            $scope.invoice.sent_on = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+        }
+    };
     //
     if ($scope.id == 'new') {
         $scope.title = 'New Invoice';
         $scope.invoice = {};
+        $scope.isSent = false;
         $scope.save = function() {
             Invoices.post($scope.invoice).then(
                 function(data) {
@@ -188,6 +194,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
             function(data) {
                 $scope.title = 'Edit Invoice #' + data.series_prefix+data.ref_num;
                 $scope.invoice = data;
+                $scope.isSent = data.sent_on !== null;
                 $scope.tableParams = new NgTableParams(
                     {
                         count: data.length, // disable paging

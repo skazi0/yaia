@@ -82,6 +82,8 @@ class Sessions(Resource):
 def invoice_args(req=None):
     parser = reqparse.RequestParser()
 
+    parser.add_argument('sent_on', required=True,
+                        help='sending date')
     parser.add_argument('series_id', required=True,
                         help='series ID')
     parser.add_argument('customer_name', required=True,
