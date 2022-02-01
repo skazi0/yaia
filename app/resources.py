@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from io import BytesIO
 import json
+from datetime import timedelta
 
 from app import db
 from app.models import *
@@ -156,10 +157,14 @@ class InvoicesList(Resource):
             series = Series.query.filter_by(
                 user_id=current_user.get_id(), id=args.series_id).one()
 
+            now = datetime.now()
             invoice = Invoice(
                 owner_id=current_user.get_id(),
                 ref_num=series.make_next_invoice_number(),
                 series_prefix=series.prefix,
+                issued_on = now,
+                due_on = now + timedelta(days=30), # TODO: make offset configurable
+                delivered_on = now - timedelta(days=now.day+1), # last day of previous month
                 **args)
 
             db.session.add(invoice)

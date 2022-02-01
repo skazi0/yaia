@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from decimal import Decimal
 from sqlalchemy import func
 from sqlalchemy.schema import ForeignKey, UniqueConstraint
@@ -40,7 +40,7 @@ class User(db.Model):
         self.login = login
         self.email = email
         self.password = bcrypt.generate_password_hash(password)
-        self.registered_on = datetime.datetime.now()
+        self.registered_on = datetime.now()
         self.admin = admin
 
     def check_password(self, password):
