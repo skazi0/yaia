@@ -164,7 +164,7 @@ class InvoicesList(Resource):
                 series_prefix=series.prefix,
                 issued_on = now,
                 due_on = now + timedelta(days=30), # TODO: make offset configurable
-                delivered_on = now - timedelta(days=now.day+1), # last day of previous month
+                delivered_on = now - timedelta(days=now.day), # last day of previous month
                 **args)
 
             db.session.add(invoice)
