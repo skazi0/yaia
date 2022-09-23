@@ -22,8 +22,8 @@
   - [x] Basic list
   - [x] Server-side paging and sorting
   - [ ] Filtering/Find
-  - [ ] Payments tracking
-    - [ ] Automatic detection of payments from external API (bank history)
+  - [x] Payments tracking
+    - [x] Automatic detection of payments from external API (bank history)
   - [ ] Invoice status (draft, ovedue, closed)
   - [ ] Automatic conversion of due amounts from customer currency to own currency from external API (currency history)
 - [ ] Invoice creation and editing
@@ -38,8 +38,8 @@
     - [x] Editing of Items
     - [x] Re-calculation of modified items
     - [ ] Saving of Items to the DB
-  - [ ] Totals calculation
+  - [x] Totals calculation
   - [ ] Tax handling (+"no tax"/"reverse charge" handling)
   - [ ] Terms & Conditions / Notes
-- [ ] Invoice export to PDF
-  - [ ] Templates
+- [x] Invoice export to PDF
+  - [x] Templates
