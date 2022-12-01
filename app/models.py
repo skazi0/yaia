@@ -128,13 +128,14 @@ class Customer(db.Model):
     email = db.Column(db.String(127))
     invoicing_address = db.Column(db.Text, nullable=False)
     shipping_address = db.Column(db.Text, nullable=False)
+    notes = db.Column(db.Text)
     __table_args__ = (
         UniqueConstraint('user_id', 'name'),
         UniqueConstraint('user_id', 'tax_id'),
     )
 
     def __init__(self, user_id, name, tax_id, contact_person,
-                 email, invoicing_address, shipping_address):
+                 email, invoicing_address, shipping_address, notes):
         self.user_id = user_id
         self.name = name
         self.tax_id = tax_id
@@ -142,3 +143,4 @@ class Customer(db.Model):
         self.email = email
         self.invoicing_address = invoicing_address
         self.shipping_address = shipping_address
+        self.notes = notes

@@ -326,6 +326,7 @@ class Customers(Resource):
         'email': fields.String,
         'invoicing_address': fields.String,
         'shipping_address': fields.String,
+        'notes': fields.String,
     }
 
     @login_required
