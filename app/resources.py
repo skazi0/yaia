@@ -287,6 +287,8 @@ def customer_args(req=None):
                         help='address to be used for invoicing')
     parser.add_argument('shipping_address', required=True,
                         help='address to be used for shipping')
+    parser.add_argument('notes',
+                        help='default notes for new invoices')
     return parser.parse_args(req)
 
 
