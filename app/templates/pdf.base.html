@@ -62,8 +62,8 @@
         <div class="break"></div>
 
         <table class="fields">
-            <tr>{% if invoice.po_num %}<th>PO Number</th>{% endif %}<th>Requester Contact</th></tr>
-            <tr>{% if invoice.po_num %}<td>{{ invoice.po_num }}</td>{% endif %}<td>{{ invoice.customer_contact_person }} &lt;{{ invoice.customer_email }}&gt;</td></tr>
+            <tr>{% if invoice.po_num %}<th>PO Number</th>{% endif %}{% if 0 %}<th>Requester Contact</th>{% endif %}</tr>
+            <tr>{% if invoice.po_num %}<td>{{ invoice.po_num }}</td>{% endif %}{% if 0 %}<td>{{ invoice.customer_contact_person }} &lt;{{ invoice.customer_email }}&gt;</td>{% endif %}</tr>
         </table>
 
         <div class="break"></div>
@@ -120,7 +120,7 @@
 
         <table class="notes">
             <tr><th>Notes</th></tr>
-            <tr><td style="white-space: pre-line">{{ invoice.notes }}</td></tr>
+            <tr><td style="white-space: pre-wrap">{{ invoice.notes | md }}</td></tr>
         </table>
     {% endblock %}
     </body>
