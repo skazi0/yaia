@@ -98,6 +98,7 @@ yaiaInvoices.controller('InvoiceCtrl', ['$scope', '$sce', '$state', '$stateParam
                 for (var prop in data) {
                     $scope.invoice['customer_' + prop] = data[prop];
                 }
+                $scope.invoice['notes'] = data['notes'];
               $scope.selectedCustomer.item = null;
             }
         );
