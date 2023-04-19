@@ -40,6 +40,6 @@
     - [ ] Saving of Items to the DB
   - [x] Totals calculation
   - [ ] Tax handling (+"no tax"/"reverse charge" handling)
-  - [ ] Terms & Conditions / Notes
+  - [x] Terms & Conditions / Notes
 - [x] Invoice export to PDF
   - [x] Templates
