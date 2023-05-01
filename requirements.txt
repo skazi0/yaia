@@ -8,7 +8,7 @@ Click==7.0
 cssselect==1.0.3
 cssselect2==0.2.1
 defusedxml==0.6.0
-Flask==1.0.3
+Flask==2.3.2
 Flask-Bcrypt==0.7.1
 Flask-Bower==1.2.1
 Flask-Login==0.3.2
