@@ -3,6 +3,7 @@ from flask_bower import Bower
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy as SQLAlchemyBase
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from flask_restful import Api
 import re
 
@@ -28,6 +29,7 @@ class SQLAlchemy(SQLAlchemyBase):
 bower = Bower(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 from app.models import *
 from app.resources import *
