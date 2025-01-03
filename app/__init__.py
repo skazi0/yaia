@@ -1,10 +1,11 @@
 from flask import Flask, Markup, render_template
 from flask_bower import Bower
 from flask_bcrypt import Bcrypt
-from flask_sqlalchemy import SQLAlchemy as SQLAlchemyBase
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_restful import Api
+from sqlalchemy.pool import NullPool
 import re
 
 from app.config import BaseConfig
@@ -15,16 +16,7 @@ app.config.from_envvar('YAIA_CONFIG')
 
 # disable pooling to avoid MySQL warnings about unused connections
 # begin closed (e.g. [Warning] Aborted connection (...) (Got an error reading communication packets)
-
-# skz: monkey patch SQLAlchemy class until
-# https://github.com/mitsuhiko/flask-sqlalchemy/issues/266
-# is fixed
-from sqlalchemy.pool import NullPool
-class SQLAlchemy(SQLAlchemyBase):
-  def apply_driver_hacks(self, app, info, options):
-    super(SQLAlchemy, self).apply_driver_hacks(app, info, options)
-    options['poolclass'] = NullPool
-    options.pop('pool_size', None)
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'poolclass': NullPool}
 
 bower = Bower(app)
 bcrypt = Bcrypt(app)
